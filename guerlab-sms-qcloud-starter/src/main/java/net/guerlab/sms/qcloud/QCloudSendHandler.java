@@ -81,7 +81,7 @@ public class QCloudSendHandler extends AbstractSendHandler<QCloudProperties> {
                 if (values.length == 1) {
                     getList(phoneMap, DEFAULT_NATION_CODE).add(phone);
                 } else {
-                    String nationCode = values[0];
+                    String nationCode = values[0].replace("+","");
                     String phoneNumber = StringUtils.join(values, "", 1, values.length);
 
                     getList(phoneMap, nationCode).add(phoneNumber);
