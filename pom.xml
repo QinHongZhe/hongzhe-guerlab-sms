@@ -46,7 +46,7 @@
     </issueManagement>
 
     <properties>
-        <revision>1.7.2-SNAPSHOT</revision>
+        <revision>1.8.0-SNAPSHOT</revision>
         <java.version>1.8</java.version>
         <project.encoding>UTF-8</project.encoding>
 
@@ -201,7 +201,18 @@
             <!-- handler -->
             <dependency>
                 <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-aliyun</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
                 <artifactId>guerlab-sms-aliyun-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-baiducloud</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -209,9 +220,32 @@
                 <artifactId>guerlab-sms-baiducloud-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
+
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-chinamobile</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-chinamobile-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-huaweicloud</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <dependency>
                 <groupId>net.guerlab.sms</groupId>
                 <artifactId>guerlab-sms-huaweicloud-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-jdcloud</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -219,9 +253,32 @@
                 <artifactId>guerlab-sms-jdcloud-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
+
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-jpush</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-jpush-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-netease</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <dependency>
                 <groupId>net.guerlab.sms</groupId>
                 <artifactId>guerlab-sms-netease-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-qcloud</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -229,14 +286,32 @@
                 <artifactId>guerlab-sms-qcloud-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
+
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-qiniu</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <dependency>
                 <groupId>net.guerlab.sms</groupId>
                 <artifactId>guerlab-sms-qiniu-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
+
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-upyun</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <dependency>
                 <groupId>net.guerlab.sms</groupId>
                 <artifactId>guerlab-sms-upyun-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-yunpian</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -264,16 +339,38 @@
         <module>guerlab-sms-core</module>
         <module>guerlab-sms-server-starter</module>
         <module>guerlab-sms-redis-repository-starter</module>
+
+        <module>guerlab-sms-aliyun</module>
         <module>guerlab-sms-aliyun-starter</module>
-        <module>guerlab-sms-qcloud-starter</module>
-        <module>guerlab-sms-huaweicloud-starter</module>
-        <module>guerlab-sms-jdcloud-starter</module>
-        <module>guerlab-sms-qiniu-starter</module>
-        <module>guerlab-sms-yunpian-starter</module>
-        <module>guerlab-sms-upyun-starter</module>
+
+        <module>guerlab-sms-baiducloud</module>
         <module>guerlab-sms-baiducloud-starter</module>
-        <module>guerlab-sms-netease-starter</module>
-        <module>guerlab-sms-jpush-starter</module>
+
+        <module>guerlab-sms-chinamobile</module>
         <module>guerlab-sms-chinamobile-starter</module>
+
+        <module>guerlab-sms-huaweicloud</module>
+        <module>guerlab-sms-huaweicloud-starter</module>
+
+        <module>guerlab-sms-jdcloud</module>
+        <module>guerlab-sms-jdcloud-starter</module>
+
+        <module>guerlab-sms-jpush</module>
+        <module>guerlab-sms-jpush-starter</module>
+
+        <module>guerlab-sms-netease</module>
+        <module>guerlab-sms-netease-starter</module>
+
+        <module>guerlab-sms-qcloud</module>
+        <module>guerlab-sms-qcloud-starter</module>
+
+        <module>guerlab-sms-qiniu</module>
+        <module>guerlab-sms-qiniu-starter</module>
+
+        <module>guerlab-sms-upyun</module>
+        <module>guerlab-sms-upyun-starter</module>
+
+        <module>guerlab-sms-yunpian</module>
+        <module>guerlab-sms-yunpian-starter</module>
     </modules>
 </project>
