@@ -46,7 +46,6 @@ public class AliyunAutoConfigure {
      *         spring应用事件发布器
      * @return 阿里云发送处理
      */
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @Conditional(AliyunSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)

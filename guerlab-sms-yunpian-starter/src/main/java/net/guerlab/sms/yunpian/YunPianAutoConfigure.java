@@ -42,7 +42,6 @@ public class YunPianAutoConfigure {
      *         spring应用事件发布器
      * @return 云片网发送处理
      */
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @Conditional(YunPianSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)

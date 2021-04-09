@@ -45,7 +45,6 @@ public class HuaWeiCloudAutoConfigure {
      *         spring应用事件发布器
      * @return 华为云发送处理
      */
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @Conditional(HuaWeiCloudSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)

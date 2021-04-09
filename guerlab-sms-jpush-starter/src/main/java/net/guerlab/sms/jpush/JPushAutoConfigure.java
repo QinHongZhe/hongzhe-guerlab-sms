@@ -46,11 +46,10 @@ public class JPushAutoConfigure {
      *         spring应用事件发布器
      * @return 极光发送处理
      */
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @Conditional(JPushSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)
-    public JPushSendHandler qiNiuSendHandler(JPushProperties properties, SmsSenderLoadBalancer loadbalancer,
+    public JPushSendHandler jpushSendHandler(JPushProperties properties, SmsSenderLoadBalancer loadbalancer,
             ObjectMapper objectMapper, ApplicationEventPublisher eventPublisher) {
         JPushSendHandler handler = new JPushSendHandler(properties, eventPublisher, objectMapper);
         loadbalancer.addTarget(handler, true);

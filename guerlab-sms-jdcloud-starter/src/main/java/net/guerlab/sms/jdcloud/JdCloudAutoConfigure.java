@@ -42,7 +42,6 @@ public class JdCloudAutoConfigure {
      *         spring应用事件发布器
      * @return 京东云发送处理
      */
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @Conditional(JdCloudSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)

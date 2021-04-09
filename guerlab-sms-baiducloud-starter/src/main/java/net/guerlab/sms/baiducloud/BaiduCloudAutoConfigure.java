@@ -42,7 +42,6 @@ public class BaiduCloudAutoConfigure {
      *         spring应用事件发布器
      * @return 百度云发送处理
      */
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @Conditional(BaiduCloudSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)

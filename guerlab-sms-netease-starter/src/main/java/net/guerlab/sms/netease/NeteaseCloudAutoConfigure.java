@@ -45,7 +45,6 @@ public class NeteaseCloudAutoConfigure {
      *         spring应用事件发布器
      * @return 网易云信发送处理
      */
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @Conditional(NeteaseCloudSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)

@@ -24,13 +24,13 @@
             <name>guer</name>
             <email>master@guerlab.net</email>
             <organization>guerlab</organization>
-            <organizationUrl>http://www.guerlab.net</organizationUrl>
+            <organizationUrl>https://www.guerlab.net</organizationUrl>
         </developer>
     </developers>
 
     <organization>
         <name>guerlab</name>
-        <url>http://www.guerlab.net</url>
+        <url>https://www.guerlab.net</url>
     </organization>
 
     <scm>
@@ -46,7 +46,7 @@
     </issueManagement>
 
     <properties>
-        <revision>1.7.1</revision>
+        <revision>1.7.2-SNAPSHOT</revision>
         <java.version>1.8</java.version>
         <project.encoding>UTF-8</project.encoding>
 

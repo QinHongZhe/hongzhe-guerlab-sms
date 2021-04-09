@@ -95,7 +95,6 @@ public class EventTest {
     @AutoConfigureAfter(SmsConfiguration.class)
     public static class TestAutoConfigure {
 
-        @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
         @Bean
         @ConditionalOnBean(SmsSenderLoadBalancer.class)
         public TestSendHandler testSendHandler(TestProperties properties, SmsSenderLoadBalancer loadbalancer,

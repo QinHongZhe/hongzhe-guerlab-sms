@@ -44,7 +44,6 @@ public class QCloudAutoConfigure {
      *         spring应用事件发布器
      * @return 腾讯云发送处理
      */
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @Conditional(QCloudSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)

@@ -21,11 +21,10 @@ import java.util.Map;
  * 基础短信配置类
  *
  * @author guer
- *
  */
 @Setter
 @Getter
-public abstract class TemplateConfig {
+public class TemplateConfig {
 
     /**
      * 短信模板

@@ -45,7 +45,6 @@ public class UpyunAutoConfigure {
      *         spring应用事件发布器
      * @return 又拍云发送处理
      */
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @Conditional(UpyunSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)

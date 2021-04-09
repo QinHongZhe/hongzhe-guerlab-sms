@@ -42,7 +42,6 @@ public class QiNiuAutoConfigure {
      *         spring应用事件发布器
      * @return 七牛云发送处理
      */
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @Conditional(QiNiuSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)

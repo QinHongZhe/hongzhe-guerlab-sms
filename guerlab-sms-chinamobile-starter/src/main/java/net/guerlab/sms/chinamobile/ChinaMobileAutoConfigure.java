@@ -45,11 +45,10 @@ public class ChinaMobileAutoConfigure {
      *         spring应用事件发布器
      * @return 移动云发送处理
      */
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @Conditional(ChinaMobileSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)
-    public ChinaMobileSendHandler huaWeiCloudSendHandler(ChinaMobileProperties properties, ObjectMapper objectMapper,
+    public ChinaMobileSendHandler chinaMobileSendHandler(ChinaMobileProperties properties, ObjectMapper objectMapper,
             SmsSenderLoadBalancer loadbalancer, ApplicationEventPublisher eventPublisher) {
         ChinaMobileSendHandler handler = new ChinaMobileSendHandler(properties, eventPublisher, objectMapper);
         loadbalancer.addTarget(handler, true);
