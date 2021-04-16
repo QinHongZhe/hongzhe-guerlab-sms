@@ -10,11 +10,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.guerlab.sms.server.repository;
+package net.guerlab.sms.server;
 
 import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.server.entity.VerificationCode;
 import net.guerlab.sms.server.properties.VerificationCodeMemoryRepositoryProperties;
+import net.guerlab.sms.server.repository.VerificationCodeMemoryRepository;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.ScheduledThreadPoolExecutor;

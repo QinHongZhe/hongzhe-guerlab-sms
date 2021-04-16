@@ -16,6 +16,7 @@ import com.github.qcloudsms.SmsMultiSender;
 import com.github.qcloudsms.SmsMultiSenderResult;
 import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.core.domain.NoticeData;
+import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.core.utils.StringUtils;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
 import org.springframework.context.ApplicationEventPublisher;
@@ -53,6 +54,7 @@ public class QCloudSendHandler extends AbstractSendHandler<QCloudProperties> {
 
         if (templateId == null) {
             log.debug("templateId invalid");
+            publishSendFailEvent(noticeData, phones, new SendFailedException("templateId invalid"));
             return false;
         }
 
@@ -92,32 +94,30 @@ public class QCloudSendHandler extends AbstractSendHandler<QCloudProperties> {
             }
         }
 
-        boolean result = phoneMap.entrySet().parallelStream()
-                .allMatch(entry -> send0(templateId, params, entry.getKey(), entry.getValue()));
-
-        if (result) {
-            publishSendEndEvent(noticeData, phones);
-        }
-
-        return result;
+        return phoneMap.entrySet().parallelStream()
+                .allMatch(entry -> send0(noticeData, templateId, params, entry.getKey(), entry.getValue()));
     }
 
     private Collection<String> getList(Map<String, ArrayList<String>> phoneMap, String nationCode) {
         return phoneMap.computeIfAbsent(nationCode, k -> new ArrayList<>());
     }
 
-    private boolean send0(int templateId, ArrayList<String> params, String nationCode, ArrayList<String> phones) {
+    private boolean send0(NoticeData noticeData, int templateId, ArrayList<String> params, String nationCode,
+            ArrayList<String> phones) {
         try {
             SmsMultiSenderResult result = sender
                     .sendWithParam(nationCode, phones, templateId, params, properties.getSmsSign(), "", "");
 
             if (result.result == 0) {
+                publishSendSuccessEvent(noticeData, phones);
                 return true;
             }
 
             log.debug("send fail[code={}, errMsg={}]", result.result, result.errMsg);
+            publishSendFailEvent(noticeData, phones, new SendFailedException(result.errMsg));
         } catch (Exception e) {
             log.debug(e.getMessage(), e);
+            publishSendFailEvent(noticeData, phones, e);
         }
 
         return false;

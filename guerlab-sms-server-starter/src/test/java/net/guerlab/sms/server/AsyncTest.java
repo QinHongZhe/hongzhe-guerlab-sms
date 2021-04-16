@@ -10,10 +10,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.guerlab.sms.server.repository;
+package net.guerlab.sms.server;
 
+import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.core.domain.NoticeData;
-import net.guerlab.sms.core.exception.NotFindSendHandlerException;
 import net.guerlab.sms.core.handler.SendHandler;
 import net.guerlab.sms.server.autoconfigure.SmsConfiguration;
 import net.guerlab.sms.server.loadbalancer.SmsSenderLoadBalancer;
@@ -23,6 +23,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 
@@ -30,13 +31,19 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 
 /**
- * 多key测试
+ * 自动配置测试
  *
  * @author guer
  */
-public class MultiKeyTest {
+@Slf4j
+public class AsyncTest {
+
+    private static final CountDownLatch countDownLatch = new CountDownLatch(1);
+
+    private static Thread runnerThread;
 
     private AnnotationConfigApplicationContext context;
 
@@ -45,7 +52,6 @@ public class MultiKeyTest {
         context = new AnnotationConfigApplicationContext();
         context.register(SmsConfiguration.class);
         context.register(TestHandlerAutoConfigure.class);
-        context.refresh();
     }
 
     @After
@@ -54,19 +60,35 @@ public class MultiKeyTest {
     }
 
     @Test
-    public void assertEquals() {
+    public void enabled() {
+        TestPropertyValues.of("sms.async.enable=true").applyTo(context);
+        context.refresh();
         NoticeService service = context.getBean(NoticeService.class);
         NoticeData noticeData = new NoticeData();
         noticeData.setType("foo");
-        Assert.assertTrue(service.send(noticeData, "test"));
+        service.asyncSend(noticeData, "test");
+        try {
+            countDownLatch.await();
+        } catch (Exception e) {
+            // ignore
+        }
+        Assert.assertNotEquals(Thread.currentThread(), runnerThread);
     }
 
-    @Test(expected = NotFindSendHandlerException.class)
-    public void assertNotEquals() {
+    @Test
+    public void disabled() {
+        TestPropertyValues.of("sms.async.enable=false").applyTo(context);
+        context.refresh();
         NoticeService service = context.getBean(NoticeService.class);
         NoticeData noticeData = new NoticeData();
-        noticeData.setType("boo");
-        service.send(noticeData, "test");
+        noticeData.setType("foo");
+        service.asyncSend(noticeData, "test");
+        try {
+            countDownLatch.await();
+        } catch (Exception e) {
+            // ignore
+        }
+        Assert.assertEquals(Thread.currentThread(), runnerThread);
     }
 
     public static class TestHandlerAutoConfigure {
@@ -91,6 +113,8 @@ public class MultiKeyTest {
 
         @Override
         public boolean send(NoticeData noticeData, Collection<String> phones) {
+            countDownLatch.countDown();
+            runnerThread = Thread.currentThread();
             return true;
         }
 

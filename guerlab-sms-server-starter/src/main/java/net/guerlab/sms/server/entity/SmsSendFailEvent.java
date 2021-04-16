@@ -10,14 +10,14 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * 发送结束事件
+ * 发送失败事件
  *
  * @author guer
  */
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class SmsSendEndEvent extends ApplicationEvent {
+public class SmsSendFailEvent extends ApplicationEvent {
 
     /**
      * 发送渠道
@@ -39,12 +39,18 @@ public class SmsSendEndEvent extends ApplicationEvent {
      */
     private final Map<String, String> params;
 
-    public SmsSendEndEvent(SendHandler source, String sendChannel, Collection<String> phones, String type,
-            Map<String, String> params) {
+    /**
+     * 异常原因
+     */
+    private final Throwable cause;
+
+    public SmsSendFailEvent(SendHandler source, String sendChannel, Collection<String> phones, String type,
+            Map<String, String> params, Throwable cause) {
         super(source);
         this.sendChannel = sendChannel;
         this.phones = phones;
         this.type = type;
         this.params = params;
+        this.cause = cause;
     }
 }

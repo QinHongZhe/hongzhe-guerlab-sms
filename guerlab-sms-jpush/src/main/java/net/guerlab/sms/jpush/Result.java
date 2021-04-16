@@ -12,24 +12,23 @@
  */
 package net.guerlab.sms.jpush;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 /**
- * 批量发送返回结果
+ * 发送返回结果
  *
  * @author guer
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class MultiResult extends Result {
+public class Result {
 
-    @JsonProperty("success_count")
-    private Integer successCount;
+    private ErrorInfo error;
 
-    @JsonProperty("failure_count")
-    private Integer failureCount;
+    @Data
+    public static final class ErrorInfo {
+
+        private String code;
+
+        private String message;
+    }
 }

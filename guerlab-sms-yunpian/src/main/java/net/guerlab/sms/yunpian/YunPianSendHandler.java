@@ -16,6 +16,7 @@ import com.yunpian.sdk.YunpianClient;
 import com.yunpian.sdk.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.core.domain.NoticeData;
+import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.core.utils.StringUtils;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
 import org.springframework.context.ApplicationEventPublisher;
@@ -55,6 +56,7 @@ public class YunPianSendHandler extends AbstractSendHandler<YunPianProperties> {
 
         if (templateId == null) {
             log.debug("templateId invalid");
+            publishSendFailEvent(noticeData, phones, new SendFailedException("templateId invalid"));
             return false;
         }
 
@@ -93,9 +95,10 @@ public class YunPianSendHandler extends AbstractSendHandler<YunPianProperties> {
 
         boolean succeed = Objects.equals(result.getCode(), 0);
         if (succeed) {
-            publishSendEndEvent(noticeData, phones);
+            publishSendSuccessEvent(noticeData, phones);
         } else {
             log.debug("send fail: {}", result.getMsg());
+            publishSendFailEvent(noticeData, phones, new SendFailedException(result.getMsg()));
         }
         return succeed;
     }

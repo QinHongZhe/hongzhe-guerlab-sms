@@ -1,11 +1,11 @@
-package net.guerlab.sms.server.repository;
+package net.guerlab.sms.server;
 
 import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.core.domain.NoticeData;
 import net.guerlab.sms.server.autoconfigure.SmsConfiguration;
-import net.guerlab.sms.server.entity.SmsSendEndEvent;
+import net.guerlab.sms.server.entity.SmsSendFinallyEvent;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
-import net.guerlab.sms.server.handler.SmsSendEndEventListener;
+import net.guerlab.sms.server.handler.SmsSendFinallyEventListener;
 import net.guerlab.sms.server.loadbalancer.SmsSenderLoadBalancer;
 import net.guerlab.sms.server.properties.AbstractHandlerProperties;
 import net.guerlab.sms.server.service.NoticeService;
@@ -44,7 +44,7 @@ public class EventTest {
         context = new AnnotationConfigApplicationContext();
         context.register(SmsConfiguration.class);
         context.register(TestAutoConfigure.class);
-        context.register(TestSmsSendEndEventListener.class);
+        context.register(TestSmsSendFinallyEventListener.class);
         context.refresh();
     }
 
@@ -80,12 +80,11 @@ public class EventTest {
     }
 
     @Component
-    public static class TestSmsSendEndEventListener implements SmsSendEndEventListener {
+    public static class TestSmsSendFinallyEventListener implements SmsSendFinallyEventListener {
 
-        @SuppressWarnings("NullableProblems")
         @Override
-        public void onApplicationEvent(SmsSendEndEvent event) {
-            log.debug("Listener SmsSendEndEvent: {}", event);
+        public void onApplicationEvent(SmsSendFinallyEvent event) {
+            log.debug("Listener SmsSendFinallyEvent: {}", event);
             threadLocal.set(event.getType());
         }
     }
@@ -115,7 +114,7 @@ public class EventTest {
 
         @Override
         public boolean send(NoticeData noticeData, Collection<String> phones) {
-            publishSendEndEvent(noticeData, phones);
+            publishSendSuccessEvent(noticeData, phones);
             return true;
         }
 

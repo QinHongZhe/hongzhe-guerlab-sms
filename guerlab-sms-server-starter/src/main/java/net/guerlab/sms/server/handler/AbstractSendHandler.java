@@ -14,7 +14,9 @@ package net.guerlab.sms.server.handler;
 
 import net.guerlab.sms.core.domain.NoticeData;
 import net.guerlab.sms.core.handler.SendHandler;
-import net.guerlab.sms.server.entity.SmsSendEndEvent;
+import net.guerlab.sms.server.entity.SmsSendFailEvent;
+import net.guerlab.sms.server.entity.SmsSendFinallyEvent;
+import net.guerlab.sms.server.entity.SmsSendSuccessEvent;
 import net.guerlab.sms.server.properties.AbstractHandlerProperties;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -51,6 +53,41 @@ public abstract class AbstractSendHandler<P extends AbstractHandlerProperties<?>
     public abstract String getChannelName();
 
     /**
+     * 发布发送成功事件
+     *
+     * @param noticeData
+     *         通知内容
+     * @param phones
+     *         手机号列表
+     */
+    protected final void publishSendSuccessEvent(NoticeData noticeData, Collection<String> phones) {
+        if (eventPublisher == null) {
+            return;
+        }
+        eventPublisher.publishEvent(
+                new SmsSendSuccessEvent(this, getChannelName(), phones, noticeData.getType(), noticeData.getParams()));
+        publishSendFinallyEvent(noticeData, phones);
+    }
+
+    /**
+     * 发布发送失败事件
+     *
+     * @param noticeData
+     *         通知内容
+     * @param phones
+     *         手机号列表
+     */
+    protected final void publishSendFailEvent(NoticeData noticeData, Collection<String> phones, Throwable cause) {
+        if (eventPublisher == null) {
+            return;
+        }
+        eventPublisher.publishEvent(
+                new SmsSendFailEvent(this, getChannelName(), phones, noticeData.getType(), noticeData.getParams(),
+                        cause));
+        publishSendFinallyEvent(noticeData, phones);
+    }
+
+    /**
      * 发布发送结束事件
      *
      * @param noticeData
@@ -58,11 +95,8 @@ public abstract class AbstractSendHandler<P extends AbstractHandlerProperties<?>
      * @param phones
      *         手机号列表
      */
-    protected final void publishSendEndEvent(NoticeData noticeData, Collection<String> phones) {
-        if (eventPublisher == null) {
-            return;
-        }
+    private void publishSendFinallyEvent(NoticeData noticeData, Collection<String> phones) {
         eventPublisher.publishEvent(
-                new SmsSendEndEvent(this, getChannelName(), phones, noticeData.getType(), noticeData.getParams()));
+                new SmsSendFinallyEvent(this, getChannelName(), phones, noticeData.getType(), noticeData.getParams()));
     }
 }

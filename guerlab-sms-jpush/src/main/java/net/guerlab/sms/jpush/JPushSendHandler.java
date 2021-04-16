@@ -15,6 +15,7 @@ package net.guerlab.sms.jpush;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.core.domain.NoticeData;
+import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -62,13 +63,14 @@ public class JPushSendHandler extends AbstractSendHandler<JPushProperties> {
 
         if (templateId == null) {
             log.debug("templateId invalid");
+            publishSendFailEvent(noticeData, phones, new SendFailedException("templateId invalid"));
             return false;
         }
 
         String[] phoneArray = phones.toArray(new String[] {});
 
         try {
-            boolean succeed;
+            Result result;
             if (phoneArray.length > 1) {
                 MultiRecipient data = new MultiRecipient();
                 data.setSignId(properties.getSignId());
@@ -84,8 +86,7 @@ public class JPushSendHandler extends AbstractSendHandler<JPushProperties> {
 
                 data.setRecipients(recipients);
 
-                MultiResult result = getResponse("https://api.sms.jpush.cn/v1/messages/batch", data, MultiResult.class);
-                succeed = result.getSuccessCount() > 0;
+                result = getResponse("https://api.sms.jpush.cn/v1/messages/batch", data, MultiResult.class);
             } else {
                 Recipient data = new Recipient();
                 data.setMobile(phoneArray[0]);
@@ -93,16 +94,19 @@ public class JPushSendHandler extends AbstractSendHandler<JPushProperties> {
                 data.setTempId(templateId);
                 data.setTempPara(noticeData.getParams());
 
-                SingleResult result = getResponse("https://api.sms.jpush.cn/v1/messages", data, SingleResult.class);
-                succeed = result.getError() == null;
+                result = getResponse("https://api.sms.jpush.cn/v1/messages", data, SingleResult.class);
             }
 
-            if (succeed) {
-                publishSendEndEvent(noticeData, phones);
+            if (result.getError() == null) {
+                publishSendSuccessEvent(noticeData, phones);
+                return true;
+            } else {
+                publishSendFailEvent(noticeData, phones, new SendFailedException(result.getError().getMessage()));
+                return false;
             }
-            return succeed;
         } catch (Exception e) {
             log.debug(e.getLocalizedMessage(), e);
+            publishSendFailEvent(noticeData, phones, e);
         }
 
         return false;

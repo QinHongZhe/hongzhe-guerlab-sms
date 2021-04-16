@@ -22,6 +22,7 @@ import com.aliyuncs.profile.IClientProfile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.core.domain.NoticeData;
+import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.core.utils.StringUtils;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
 import org.springframework.context.ApplicationEventPublisher;
@@ -78,6 +79,7 @@ public class AliyunSendHandler extends AbstractSendHandler<AliyunProperties> {
             paramString = objectMapper.writeValueAsString(noticeData.getParams());
         } catch (Exception e) {
             log.debug(e.getMessage(), e);
+            publishSendFailEvent(noticeData, phones, e);
             return false;
         }
 
@@ -92,15 +94,17 @@ public class AliyunSendHandler extends AbstractSendHandler<AliyunProperties> {
             SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
 
             if (OK.equals(sendSmsResponse.getCode())) {
-                publishSendEndEvent(noticeData, phones);
+                publishSendSuccessEvent(noticeData, phones);
                 return true;
             }
 
             log.debug("send fail[code={}, message={}]", sendSmsResponse.getCode(), sendSmsResponse.getMessage());
+
+            publishSendFailEvent(noticeData, phones, new SendFailedException(sendSmsResponse.getMessage()));
         } catch (Exception e) {
             log.debug(e.getMessage(), e);
+            publishSendFailEvent(noticeData, phones, e);
         }
-
         return false;
     }
 

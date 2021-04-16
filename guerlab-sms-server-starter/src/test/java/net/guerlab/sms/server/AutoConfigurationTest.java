@@ -10,10 +10,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.guerlab.sms.server.repository;
+package net.guerlab.sms.server;
 
 import net.guerlab.sms.server.autoconfigure.SmsConfiguration;
 import net.guerlab.sms.server.loadbalancer.SmsSenderLoadBalancer;
+import net.guerlab.sms.server.repository.VerificationCodeRepository;
 import net.guerlab.sms.server.service.CodeGenerate;
 import net.guerlab.sms.server.service.SendAsyncThreadPoolExecutor;
 import net.guerlab.sms.server.service.VerificationCodeService;

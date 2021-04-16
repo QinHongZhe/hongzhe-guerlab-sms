@@ -19,6 +19,7 @@ import com.baidubce.services.sms.model.SendMessageV3Request;
 import com.baidubce.services.sms.model.SendMessageV3Response;
 import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.core.domain.NoticeData;
+import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.core.utils.StringUtils;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
 import org.springframework.context.ApplicationEventPublisher;
@@ -57,6 +58,7 @@ public class BaiduCloudSendHandler extends AbstractSendHandler<BaiduCloudPropert
 
         if (templateId == null) {
             log.debug("templateId invalid");
+            publishSendFailEvent(noticeData, phones, new SendFailedException("templateId invalid"));
             return false;
         }
 
@@ -69,15 +71,16 @@ public class BaiduCloudSendHandler extends AbstractSendHandler<BaiduCloudPropert
         SendMessageV3Response response = client.sendMessage(request);
 
         if (response == null) {
-            log.debug("send fail: not response");
+            log.debug("send fail: empty response");
+            publishSendFailEvent(noticeData, phones, new SendFailedException("empty response"));
             return false;
         } else if (!response.isSuccess()) {
-            log.debug("send fail: {}", response.getCode());
+            log.debug("send fail: [code:{}, message:{}]", response.getCode(), response.getMessage());
+            publishSendFailEvent(noticeData, phones, new SendFailedException(response.getMessage()));
             return false;
         }
 
-        publishSendEndEvent(noticeData, phones);
-
+        publishSendSuccessEvent(noticeData, phones);
         return true;
     }
 }

@@ -15,6 +15,7 @@ package net.guerlab.sms.netease;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.core.domain.NoticeData;
+import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
 import net.guerlab.sms.server.utils.RandomUtils;
 import org.apache.http.HttpResponse;
@@ -82,6 +83,7 @@ public class NeteaseCloudSendHandler extends AbstractSendHandler<NeteaseCloudPro
 
         if (templateId == null) {
             log.debug("templateId invalid");
+            publishSendFailEvent(noticeData, phones, new SendFailedException("templateId invalid"));
             return false;
         }
 
@@ -128,11 +130,14 @@ public class NeteaseCloudSendHandler extends AbstractSendHandler<NeteaseCloudPro
 
             boolean succeed = NeteaseCloudResult.SUCCESS_CODE.equals(result.getCode());
             if (succeed) {
-                publishSendEndEvent(noticeData, phones);
+                publishSendSuccessEvent(noticeData, phones);
+            } else {
+                publishSendFailEvent(noticeData, phones, new SendFailedException(result.getMsg()));
             }
             return succeed;
         } catch (Exception e) {
             log.debug(e.getLocalizedMessage(), e);
+            publishSendFailEvent(noticeData, phones, e);
             return false;
         }
     }

@@ -15,6 +15,7 @@ package net.guerlab.sms.upyun;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.core.domain.NoticeData;
+import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.core.utils.StringUtils;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
 import org.apache.http.HttpHeaders;
@@ -62,6 +63,7 @@ public class UpyunSendHandler extends AbstractSendHandler<UpyunProperties> {
 
         if (templateId == null) {
             log.debug("templateId invalid");
+            publishSendFailEvent(noticeData, phones, new SendFailedException("templateId invalid"));
             return false;
         }
 
@@ -94,6 +96,7 @@ public class UpyunSendHandler extends AbstractSendHandler<UpyunProperties> {
             boolean sendFail = !responseContent.contains("message_ids");
             if (!isJson || sendFail) {
                 log.debug("send fail: {}", responseContent);
+                publishSendFailEvent(noticeData, phones, new SendFailedException(responseContent));
                 return false;
             }
 
@@ -104,18 +107,22 @@ public class UpyunSendHandler extends AbstractSendHandler<UpyunProperties> {
             Collection<MessageId> messageIds = result.getMessageIds();
 
             if (messageIds == null || messageIds.isEmpty()) {
+                publishSendFailEvent(noticeData, phones, new SendFailedException("empty messageIds list"));
                 return false;
             }
 
             boolean succeed = messageIds.stream().filter(Objects::nonNull).anyMatch(MessageId::succeed);
 
             if (succeed) {
-                publishSendEndEvent(noticeData, phones);
+                publishSendSuccessEvent(noticeData, phones);
+            } else {
+                publishSendFailEvent(noticeData, phones, new SendFailedException("templateId invalid"));
             }
 
             return succeed;
         } catch (Exception e) {
             log.debug(e.getLocalizedMessage(), e);
+            publishSendFailEvent(noticeData, phones, e);
             return false;
         }
     }

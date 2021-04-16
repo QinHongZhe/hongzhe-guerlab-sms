@@ -14,6 +14,8 @@ package net.guerlab.sms.jpush;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * 单条发送返回结果
@@ -21,18 +23,10 @@ import lombok.Data;
  * @author guer
  */
 @Data
-public class SingleResult {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class SingleResult extends Result {
 
     @JsonProperty("msg_id")
     private Integer msgId;
-
-    private ErrorInfo error;
-
-    @Data
-    public static final class ErrorInfo {
-
-        private String code;
-
-        private String message;
-    }
 }

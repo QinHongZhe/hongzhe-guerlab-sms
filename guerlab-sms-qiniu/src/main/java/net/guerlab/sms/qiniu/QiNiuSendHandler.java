@@ -17,6 +17,7 @@ import com.qiniu.sms.SmsManager;
 import com.qiniu.util.Auth;
 import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.core.domain.NoticeData;
+import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -51,6 +52,7 @@ public class QiNiuSendHandler extends AbstractSendHandler<QiNiuProperties> {
 
         if (templateId == null) {
             log.debug("templateId invalid");
+            publishSendFailEvent(noticeData, phones, new SendFailedException("templateId invalid"));
             return false;
         }
 
@@ -58,16 +60,17 @@ public class QiNiuSendHandler extends AbstractSendHandler<QiNiuProperties> {
             Response response = smsManager
                     .sendMessage(templateId, phones.toArray(new String[] {}), noticeData.getParams());
 
-            if (!response.isOK()) {
-                log.debug("send fail, error: {}", response.error);
-                return false;
+            if (response.isOK()) {
+                publishSendSuccessEvent(noticeData, phones);
+                return true;
             }
 
-            publishSendEndEvent(noticeData, phones);
-
-            return true;
+            log.debug("send fail, error: {}", response.error);
+            publishSendFailEvent(noticeData, phones, new SendFailedException(response.error));
+            return false;
         } catch (Exception e) {
             log.debug(e.getLocalizedMessage(), e);
+            publishSendFailEvent(noticeData, phones, e);
         }
 
         return false;

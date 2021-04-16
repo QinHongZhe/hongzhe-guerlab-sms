@@ -102,6 +102,7 @@ public class ChinaMobileSendHandler extends AbstractSendHandler<ChinaMobilePrope
 
         if (templateId == null) {
             log.debug("templateId invalid");
+            publishSendFailEvent(noticeData, phones, new SendFailedException("templateId invalid"));
             return false;
         }
 
@@ -144,11 +145,14 @@ public class ChinaMobileSendHandler extends AbstractSendHandler<ChinaMobilePrope
 
             boolean succeed = ChinaMobileResult.SUCCESS_RSPCOD.equals(result.getRspcod());
             if (succeed) {
-                publishSendEndEvent(noticeData, phones);
+                publishSendSuccessEvent(noticeData, phones);
+            } else {
+                publishSendFailEvent(noticeData, phones, new SendFailedException(result.getRspcod()));
             }
             return succeed;
         } catch (Exception e) {
             log.debug(e.getLocalizedMessage(), e);
+            publishSendFailEvent(noticeData, phones, e);
             return false;
         }
     }

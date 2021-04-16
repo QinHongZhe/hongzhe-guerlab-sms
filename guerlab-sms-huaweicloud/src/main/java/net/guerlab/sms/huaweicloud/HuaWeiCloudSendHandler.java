@@ -109,6 +109,7 @@ public class HuaWeiCloudSendHandler extends AbstractSendHandler<HuaWeiCloudPrope
 
         if (templateId == null) {
             log.debug("templateId invalid");
+            publishSendFailEvent(noticeData, phones, new SendFailedException("templateId invalid"));
             return false;
         }
 
@@ -156,11 +157,14 @@ public class HuaWeiCloudSendHandler extends AbstractSendHandler<HuaWeiCloudPrope
 
             boolean succeed = HuaWeiCloudResult.SUCCESS_CODE.equals(result.getCode());
             if (succeed) {
-                publishSendEndEvent(noticeData, phones);
+                publishSendSuccessEvent(noticeData, phones);
+            } else {
+                publishSendFailEvent(noticeData, phones, new SendFailedException(result.getDescription()));
             }
             return succeed;
         } catch (Exception e) {
             log.debug(e.getLocalizedMessage(), e);
+            publishSendFailEvent(noticeData, phones, e);
             return false;
         }
     }

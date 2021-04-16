@@ -21,6 +21,7 @@ import com.jdcloud.sdk.service.sms.model.BatchSendRequest;
 import com.jdcloud.sdk.service.sms.model.BatchSendResult;
 import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.core.domain.NoticeData;
+import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -55,6 +56,7 @@ public class JdCloudSendHandler extends AbstractSendHandler<JdCloudProperties> {
 
         if (templateId == null) {
             log.debug("templateId invalid");
+            publishSendFailEvent(noticeData, phones, new SendFailedException("templateId invalid"));
             return false;
         }
 
@@ -82,9 +84,10 @@ public class JdCloudSendHandler extends AbstractSendHandler<JdCloudProperties> {
         boolean flag = status != null && status;
 
         if (flag) {
-            publishSendEndEvent(noticeData, phones);
+            publishSendSuccessEvent(noticeData, phones);
         } else {
-            log.debug("send fail, error info: [{}:{}]", result.getCode(), result.getMessage());
+            log.debug("send fail [code:{}, message:{}]", result.getCode(), result.getMessage());
+            publishSendFailEvent(noticeData, phones, new SendFailedException(result.getMessage()));
         }
 
         return flag;
