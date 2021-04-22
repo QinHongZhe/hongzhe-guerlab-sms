@@ -20,6 +20,7 @@ import net.guerlab.sms.server.loadbalancer.*;
 import net.guerlab.sms.server.properties.*;
 import net.guerlab.sms.server.repository.VerificationCodeMemoryRepository;
 import net.guerlab.sms.server.repository.VerificationCodeRepository;
+import net.guerlab.sms.server.service.DefaultSendAsyncThreadPoolExecutor;
 import net.guerlab.sms.server.service.SendAsyncThreadPoolExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -167,7 +168,8 @@ public class SmsConfiguration {
      */
     @Bean
     @ConditionalOnProperty(name = "sms.async.enable", havingValue = "true")
+    @ConditionalOnMissingBean
     public SendAsyncThreadPoolExecutor sendAsyncThreadPoolExecutor(SmsAsyncProperties properties) {
-        return new SendAsyncThreadPoolExecutor(properties);
+        return new DefaultSendAsyncThreadPoolExecutor(properties);
     }
 }
