@@ -46,7 +46,7 @@
     </issueManagement>
 
     <properties>
-        <revision>1.9.0</revision>
+        <revision>1.10.0-SNAPSHOT</revision>
         <java.version>1.8</java.version>
         <project.encoding>UTF-8</project.encoding>
 
@@ -289,6 +289,17 @@
 
             <dependency>
                 <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-qcloud-v3</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-qcloud-v3-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
                 <artifactId>guerlab-sms-qiniu</artifactId>
                 <version>${revision}</version>
             </dependency>
@@ -363,6 +374,9 @@
 
         <module>guerlab-sms-qcloud</module>
         <module>guerlab-sms-qcloud-starter</module>
+
+        <module>guerlab-sms-qcloud-v3</module>
+        <module>guerlab-sms-qcloud-v3-starter</module>
 
         <module>guerlab-sms-qiniu</module>
         <module>guerlab-sms-qiniu-starter</module>

@@ -35,6 +35,7 @@
 - [x] 极光短信 guerlab-sms-jpush-starter
 - [X] 网易云信 guerlab-sms-netease-starter
 - [x] 腾讯云 guerlab-sms-qcloud-starter
+- [x] 腾讯云V3 guerlab-sms-qcloud-v3-starter
 - [x] 七牛云 guerlab-sms-qiniu-starter
 - [X] 又拍云 guerlab-sms-upyun-starter
 - [X] 云片网 guerlab-sms-yunpian-starter
