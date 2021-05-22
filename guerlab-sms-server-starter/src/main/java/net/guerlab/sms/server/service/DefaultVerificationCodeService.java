@@ -46,6 +46,8 @@ public class DefaultVerificationCodeService implements VerificationCodeService {
 
     private CodeGenerate codeGenerate;
 
+    private VerificationCodeTypeGenerate verificationCodeTypeGenerate;
+
     @Autowired
     public void setRepository(VerificationCodeRepository repository) {
         this.repository = repository;
@@ -64,6 +66,11 @@ public class DefaultVerificationCodeService implements VerificationCodeService {
     @Autowired
     public void setCodeGenerate(CodeGenerate codeGenerate) {
         this.codeGenerate = codeGenerate;
+    }
+
+    @Autowired(required = false)
+    public void setVerificationCodeTypeGenerate(VerificationCodeTypeGenerate verificationCodeTypeGenerate) {
+        this.verificationCodeTypeGenerate = verificationCodeTypeGenerate;
     }
 
     @Override
@@ -142,8 +149,16 @@ public class DefaultVerificationCodeService implements VerificationCodeService {
             params.put(MSG_KEY_EXPIRATION_TIME_OF_MINUTES, String.valueOf(expirationTime / 60));
         }
 
+        String type = null;
+        if (verificationCodeTypeGenerate != null) {
+            type = verificationCodeTypeGenerate.getType(phone, params);
+        }
+        if (type == null) {
+            type = properties.getType();
+        }
+
         NoticeData notice = new NoticeData();
-        notice.setType(VerificationCode.TYPE);
+        notice.setType(type);
         notice.setParams(params);
 
         if (noticeService.send(notice, phone) && newVerificationCode) {

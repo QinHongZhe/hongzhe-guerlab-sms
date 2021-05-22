@@ -88,6 +88,13 @@
       "defaultValue": "true"
     },
     {
+      "name": "sms.verification-code.type",
+      "type": "java.lang.String",
+      "sourceType": "net.guerlab.sms.server.properties.VerificationCodeProperties",
+      "description": "验证码业务所使用的类型.",
+      "defaultValue": "VerificationCode"
+    },
+    {
       "name": "sms.verification-code.expiration-time",
       "type": "java.lang.Long",
       "sourceType": "net.guerlab.sms.server.properties.VerificationCodeProperties",

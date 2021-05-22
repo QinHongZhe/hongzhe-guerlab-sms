@@ -25,11 +25,6 @@ import java.time.LocalDateTime;
 public class VerificationCode {
 
     /**
-     * 类型
-     */
-    public static final String TYPE = "VerificationCode";
-
-    /**
      * 手机号
      */
     private String phone;

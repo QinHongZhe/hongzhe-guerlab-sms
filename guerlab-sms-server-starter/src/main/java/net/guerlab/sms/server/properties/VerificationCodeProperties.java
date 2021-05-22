@@ -19,11 +19,20 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * 验证码配置
  *
  * @author guer
- *
  */
 @Data
 @ConfigurationProperties(prefix = "sms.verification-code")
 public class VerificationCodeProperties {
+
+    /**
+     * 默认验证码业务所使用的类型
+     */
+    public static final String DEFAULT_TYPE = "VerificationCode";
+
+    /**
+     * 验证码业务所使用的类型
+     */
+    private String type = DEFAULT_TYPE;
 
     /**
      * 验证码过期时间,小于等于0表示不过期,单位秒
