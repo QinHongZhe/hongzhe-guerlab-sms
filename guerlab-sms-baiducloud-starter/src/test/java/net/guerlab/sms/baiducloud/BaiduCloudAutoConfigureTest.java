@@ -13,6 +13,7 @@
 package net.guerlab.sms.baiducloud;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.guerlab.sms.server.autoconfigure.SmsConfiguration;
 import net.guerlab.sms.server.loadbalancer.RandomSmsLoadBalancer;
 import org.junit.After;
 import org.junit.Assert;
@@ -33,6 +34,7 @@ public class BaiduCloudAutoConfigureTest {
         context = new AnnotationConfigApplicationContext();
         context.registerBean("objectMapper", ObjectMapper.class);
         context.registerBean("smsSenderLoadbalancer", RandomSmsLoadBalancer.class);
+        context.register(SmsConfiguration.class);
         TestPropertyValues.of("sms.baiducloud.access-key-id=accessKeyId").applyTo(context);
         TestPropertyValues.of("sms.baiducloud.secret-access-key=secretAccessKey").applyTo(context);
         TestPropertyValues.of("sms.baiducloud.endpoint=endpoint").applyTo(context);

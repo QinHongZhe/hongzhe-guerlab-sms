@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.guerlab.sms.core.domain.NoticeData;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 
@@ -35,7 +36,8 @@ public class ChinaMobileSignTest {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        ChinaMobileSendHandler sendHandler = new ChinaMobileSendHandler(properties, null, objectMapper);
+        ChinaMobileSendHandler sendHandler = new ChinaMobileSendHandler(properties, null, objectMapper,
+                new RestTemplate());
 
         NoticeData noticeData = new NoticeData();
         noticeData.setType("test");

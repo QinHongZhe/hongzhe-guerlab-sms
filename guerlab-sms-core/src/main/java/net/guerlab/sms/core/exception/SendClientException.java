@@ -44,4 +44,16 @@ public class SendClientException extends RuntimeException {
     public SendClientException(String message) {
         super(DEFAULT_MSG + message);
     }
+
+    /**
+     * 通过错误信息构造短信发送客户端错误
+     *
+     * @param message
+     *         错误信息
+     * @param cause
+     *         源异常
+     */
+    public SendClientException(String message, Throwable cause) {
+        super(DEFAULT_MSG + message, cause);
+    }
 }

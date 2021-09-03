@@ -17,19 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.core.domain.NoticeData;
 import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContextBuilder;
-import org.apache.http.ssl.TrustStrategy;
-import org.apache.http.util.EntityUtils;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
 
-import javax.net.ssl.SSLContext;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -46,13 +37,13 @@ public class JPushSendHandler extends AbstractSendHandler<JPushProperties> {
 
     private final ObjectMapper objectMapper;
 
-    private final CloseableHttpClient client;
+    private final RestTemplate restTemplate;
 
     public JPushSendHandler(JPushProperties properties, ApplicationEventPublisher eventPublisher,
-            ObjectMapper objectMapper) {
+            ObjectMapper objectMapper, RestTemplate restTemplate) {
         super(properties, eventPublisher);
         this.objectMapper = objectMapper;
-        client = buildHttpclient();
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -113,12 +104,20 @@ public class JPushSendHandler extends AbstractSendHandler<JPushProperties> {
     }
 
     private <T> T getResponse(String uri, Object requestData, Class<T> clazz) throws Exception {
-        HttpResponse response = client.execute(
-                RequestBuilder.create("POST").setUri(uri).addHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-                        .addHeader(HttpHeaders.AUTHORIZATION, "Basic " + getSign())
-                        .setEntity(new StringEntity(objectMapper.writeValueAsString(requestData))).build());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add(HttpHeaders.AUTHORIZATION, "Basic " + getSign());
 
-        String responseContent = EntityUtils.toString(response.getEntity());
+        HttpEntity<String> httpEntity = new HttpEntity<>(objectMapper.writeValueAsString(requestData), headers);
+
+        ResponseEntity<String> httpResponse = restTemplate.exchange(uri, HttpMethod.POST, httpEntity, String.class);
+
+        if (httpResponse.getBody() == null) {
+            log.debug("response body ie null");
+            throw new SendFailedException("response body ie null");
+        }
+
+        String responseContent = httpResponse.getBody();
 
         log.debug("responseContent: {}", responseContent);
 
@@ -128,18 +127,6 @@ public class JPushSendHandler extends AbstractSendHandler<JPushProperties> {
     private String getSign() {
         String origin = properties.getAppKey() + ":" + properties.getMasterSecret();
         return Base64.getEncoder().encodeToString(origin.getBytes(StandardCharsets.UTF_8));
-    }
-
-    private CloseableHttpClient buildHttpclient() {
-        try {
-            TrustStrategy trustStrategy = (x509CertChain, authType) -> true;
-            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(trustStrategy).build();
-
-            return HttpClients.custom().setSSLContext(sslContext).setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
-                    .build();
-        } catch (Exception e) {
-            throw new RuntimeException(e.getLocalizedMessage(), e);
-        }
     }
 
     @Override

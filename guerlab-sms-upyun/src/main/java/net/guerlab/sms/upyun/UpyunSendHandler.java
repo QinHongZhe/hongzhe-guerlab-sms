@@ -18,20 +18,10 @@ import net.guerlab.sms.core.domain.NoticeData;
 import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.core.utils.StringUtils;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContextBuilder;
-import org.apache.http.ssl.TrustStrategy;
-import org.apache.http.util.EntityUtils;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
 
-import javax.net.ssl.SSLContext;
 import java.util.*;
 
 /**
@@ -46,13 +36,13 @@ public class UpyunSendHandler extends AbstractSendHandler<UpyunProperties> {
 
     private final ObjectMapper objectMapper;
 
-    private final CloseableHttpClient client;
+    private final RestTemplate restTemplate;
 
     public UpyunSendHandler(UpyunProperties properties, ApplicationEventPublisher eventPublisher,
-            ObjectMapper objectMapper) {
+            ObjectMapper objectMapper, RestTemplate restTemplate) {
         super(properties, eventPublisher);
         this.objectMapper = objectMapper;
-        client = buildHttpclient();
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -85,12 +75,23 @@ public class UpyunSendHandler extends AbstractSendHandler<UpyunProperties> {
         request.setTemplateId(templateId);
         request.setVars(StringUtils.join(params, "|"));
 
-        try {
-            HttpResponse response = client.execute(
-                    RequestBuilder.post(API_URL).addHeader(HttpHeaders.AUTHORIZATION, properties.getToken())
-                            .addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType()).setEntity(new StringEntity(objectMapper.writeValueAsString(request))).build());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add(HttpHeaders.AUTHORIZATION, properties.getToken());
 
-            String responseContent = EntityUtils.toString(response.getEntity());
+        try {
+            HttpEntity<String> httpEntity = new HttpEntity<>(objectMapper.writeValueAsString(request), headers);
+
+            ResponseEntity<String> httpResponse = restTemplate
+                    .exchange(API_URL, HttpMethod.POST, httpEntity, String.class);
+
+            if (httpResponse.getBody() == null) {
+                log.debug("response body ie null");
+                publishSendFailEvent(noticeData, phones, new SendFailedException("response body ie null"));
+                return false;
+            }
+
+            String responseContent = httpResponse.getBody();
 
             boolean isJson = responseContent.startsWith("{") && responseContent.endsWith("}");
             boolean sendFail = !responseContent.contains("message_ids");
@@ -124,18 +125,6 @@ public class UpyunSendHandler extends AbstractSendHandler<UpyunProperties> {
             log.debug(e.getLocalizedMessage(), e);
             publishSendFailEvent(noticeData, phones, e);
             return false;
-        }
-    }
-
-    private CloseableHttpClient buildHttpclient() {
-        try {
-            TrustStrategy trustStrategy = (x509CertChain, authType) -> true;
-            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(trustStrategy).build();
-
-            return HttpClients.custom().setSSLContext(sslContext).setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
-                    .build();
-        } catch (Exception e) {
-            throw new RuntimeException(e.getLocalizedMessage(), e);
         }
     }
 

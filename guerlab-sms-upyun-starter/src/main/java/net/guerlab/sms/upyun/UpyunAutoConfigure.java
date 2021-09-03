@@ -21,6 +21,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.*;
 import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * 又拍云发送端点自动配置
@@ -43,14 +44,16 @@ public class UpyunAutoConfigure {
      *         负载均衡器
      * @param eventPublisher
      *         spring应用事件发布器
+     * @param restTemplate
+     *         restTemplate
      * @return 又拍云发送处理
      */
     @Bean
     @Conditional(UpyunSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)
     public UpyunSendHandler upyunSendHandler(UpyunProperties properties, ObjectMapper objectMapper,
-            SmsSenderLoadBalancer loadbalancer, ApplicationEventPublisher eventPublisher) {
-        UpyunSendHandler handler = new UpyunSendHandler(properties, eventPublisher, objectMapper);
+            SmsSenderLoadBalancer loadbalancer, ApplicationEventPublisher eventPublisher, RestTemplate restTemplate) {
+        UpyunSendHandler handler = new UpyunSendHandler(properties, eventPublisher, objectMapper, restTemplate);
         loadbalancer.addTarget(handler, true);
         loadbalancer.setWeight(handler, properties.getWeight());
         return handler;

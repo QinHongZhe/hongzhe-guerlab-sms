@@ -76,6 +76,8 @@ public abstract class AbstractSendHandler<P extends AbstractHandlerProperties<?>
      *         通知内容
      * @param phones
      *         手机号列表
+     * @param cause
+     *         源异常
      */
     protected final void publishSendFailEvent(NoticeData noticeData, Collection<String> phones, Throwable cause) {
         if (eventPublisher == null) {
