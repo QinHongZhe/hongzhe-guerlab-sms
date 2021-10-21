@@ -15,7 +15,7 @@ package net.guerlab.sms.core.exception;
 /**
  * 类型无效
  *
- * @author guer
+ * @author dcy
  */
 public class TypeIsNullException extends RuntimeException {
 
