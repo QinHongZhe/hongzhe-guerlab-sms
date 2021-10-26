@@ -18,9 +18,8 @@ import java.util.Locale;
  * 未找到有效的短信发送处理
  *
  * @author guer
- *
  */
-public class NotFindSendHandlerException extends RuntimeException {
+public class NotFindSendHandlerException extends SmsException {
 
     private static final long serialVersionUID = 1L;
 

@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.guerlab.loadbalancer.ILoadBalancer;
 import net.guerlab.sms.core.domain.NoticeData;
 import net.guerlab.sms.core.exception.NotFindSendHandlerException;
+import net.guerlab.sms.core.exception.SmsException;
 import net.guerlab.sms.core.handler.SendHandler;
 import net.guerlab.sms.core.utils.StringUtils;
 import net.guerlab.sms.server.properties.SmsAsyncProperties;
@@ -90,9 +91,18 @@ public class DefaultNoticeService implements NoticeService {
 
         if (sendHandler == null) {
             result.exception = new NotFindSendHandlerException();
-            log.debug(result.exception.getLocalizedMessage());
         } else {
-            result.result = sendHandler.send(noticeData, phones);
+            try {
+                result.result = sendHandler.send(noticeData, phones);
+            } catch (RuntimeException e) {
+                result.exception = e;
+            } catch (Exception e) {
+                result.exception = new SmsException(e.getLocalizedMessage(), e);
+            }
+        }
+
+        if (result.exception != null) {
+            log.debug(result.exception.getLocalizedMessage());
         }
 
         return result;

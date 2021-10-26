@@ -18,9 +18,8 @@ import java.util.Locale;
  * 手机验证码信息无效
  *
  * @author guer
- *
  */
-public class VerificationCodeIsNullException extends RuntimeException {
+public class VerificationCodeIsNullException extends SmsException {
 
     private static final long serialVersionUID = 1L;
 

@@ -18,9 +18,8 @@ import java.util.Locale;
  * 短信发送失败
  *
  * @author guer
- *
  */
-public class SendFailedException extends RuntimeException {
+public class SendFailedException extends SmsException {
 
     private static final long serialVersionUID = 1L;
 

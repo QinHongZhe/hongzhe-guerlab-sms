@@ -19,7 +19,7 @@ import java.util.Locale;
  *
  * @author guer
  */
-public class SendClientException extends RuntimeException {
+public class SendClientException extends SmsException {
 
     private static final long serialVersionUID = 1L;
 
