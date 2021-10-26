@@ -59,7 +59,9 @@ public interface VerificationCodeService {
      * @param phone
      *         手机号码
      */
-    void send(String phone);
+    default void send(String phone) {
+        send(phone, null);
+    }
 
     /**
      * 发送验证码
@@ -69,7 +71,7 @@ public interface VerificationCodeService {
      * @param type
      *         类型
      */
-    void send(String phone, String type);
+    void send(String phone, @Nullable String type);
 
     /**
      * 验证

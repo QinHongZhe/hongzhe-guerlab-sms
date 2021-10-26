@@ -24,6 +24,7 @@ import net.guerlab.sms.core.domain.NoticeData;
 import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -94,7 +95,7 @@ public class JdCloudSendHandler extends AbstractSendHandler<JdCloudProperties> {
     }
 
     @Override
-    public boolean acceptSend(String type) {
+    public boolean acceptSend(@Nullable String type) {
         return properties.getTemplates().containsKey(type);
     }
 

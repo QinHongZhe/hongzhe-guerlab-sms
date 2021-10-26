@@ -57,18 +57,7 @@ public class UpyunSendHandler extends AbstractSendHandler<UpyunProperties> {
             return false;
         }
 
-        List<String> paramsOrder = properties.getParamsOrder(type);
-
-        ArrayList<String> params = new ArrayList<>();
-
-        if (!paramsOrder.isEmpty()) {
-            Map<String, String> paramMap = noticeData.getParams();
-            for (String paramName : paramsOrder) {
-                String paramValue = paramMap.get(paramName);
-
-                params.add(paramValue);
-            }
-        }
+        ArrayList<String> params = buildParams(noticeData);
 
         UpyunSendRequest request = new UpyunSendRequest();
         request.setMobile(StringUtils.join(phones, ","));
@@ -126,6 +115,23 @@ public class UpyunSendHandler extends AbstractSendHandler<UpyunProperties> {
             publishSendFailEvent(noticeData, phones, e);
             return false;
         }
+    }
+
+    private ArrayList<String> buildParams(NoticeData noticeData) {
+        List<String> paramsOrder = properties.getParamsOrder(noticeData.getType());
+
+        ArrayList<String> params = new ArrayList<>();
+
+        if (!paramsOrder.isEmpty()) {
+            Map<String, String> paramMap = noticeData.getParams();
+            for (String paramName : paramsOrder) {
+                String paramValue = paramMap.get(paramName);
+
+                params.add(paramValue);
+            }
+        }
+
+        return params;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package net.guerlab.sms.server.service;
 
+import org.springframework.lang.Nullable;
+
 import java.util.Map;
 
 /**
@@ -19,5 +21,6 @@ public interface VerificationCodeTypeGenerate {
      *         参数列表
      * @return 验证码类型
      */
+    @Nullable
     String getType(String phone, Map<String, String> params);
 }
