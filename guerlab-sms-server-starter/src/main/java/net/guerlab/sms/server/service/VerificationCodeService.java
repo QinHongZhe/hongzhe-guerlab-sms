@@ -60,6 +60,16 @@ public interface VerificationCodeService {
     void send(String phone);
 
     /**
+     * 发送验证码
+     *
+     * @param phone
+     *            手机号码
+     * @param type
+     *            类型
+     */
+    void send(String phone,String type);
+
+    /**
      * 验证
      *
      * @param phone
