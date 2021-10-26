@@ -21,6 +21,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.*;
 import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * 极光发送端点自动配置
@@ -44,14 +45,16 @@ public class JPushAutoConfigure {
      *         objectMapper
      * @param eventPublisher
      *         spring应用事件发布器
+     * @param restTemplate
+     *         restTemplate
      * @return 极光发送处理
      */
     @Bean
     @Conditional(JPushSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)
     public JPushSendHandler jpushSendHandler(JPushProperties properties, SmsSenderLoadBalancer loadbalancer,
-            ObjectMapper objectMapper, ApplicationEventPublisher eventPublisher) {
-        JPushSendHandler handler = new JPushSendHandler(properties, eventPublisher, objectMapper);
+            ObjectMapper objectMapper, ApplicationEventPublisher eventPublisher, RestTemplate restTemplate) {
+        JPushSendHandler handler = new JPushSendHandler(properties, eventPublisher, objectMapper, restTemplate);
         loadbalancer.addTarget(handler, true);
         loadbalancer.setWeight(handler, properties.getWeight());
         return handler;
@@ -59,7 +62,6 @@ public class JPushAutoConfigure {
 
     public static class JPushSendHandlerCondition implements Condition {
 
-        @SuppressWarnings("NullableProblems")
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             Boolean enable = context.getEnvironment().getProperty("sms.jpush.enable", Boolean.class);

@@ -36,9 +36,6 @@ public class DefaultSendAsyncThreadPoolExecutor extends AbstractSendAsyncThreadP
 
     @Override
     protected void submit0(Runnable command) {
-        if (command == null) {
-            return;
-        }
         executor.execute(command);
     }
 }

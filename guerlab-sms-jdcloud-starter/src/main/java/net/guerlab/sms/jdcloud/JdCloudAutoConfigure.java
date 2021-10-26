@@ -55,7 +55,6 @@ public class JdCloudAutoConfigure {
 
     public static class JdCloudSendHandlerCondition implements Condition {
 
-        @SuppressWarnings("NullableProblems")
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             Boolean enable = context.getEnvironment().getProperty("sms.jdcloud.enable", Boolean.class);

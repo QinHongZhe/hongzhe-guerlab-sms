@@ -13,6 +13,7 @@
 package net.guerlab.sms.qcloudv3;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.guerlab.sms.server.autoconfigure.SmsConfiguration;
 import net.guerlab.sms.server.loadbalancer.RandomSmsLoadBalancer;
 import org.junit.After;
 import org.junit.Assert;
@@ -33,6 +34,7 @@ public class QCloudV3AutoConfigureTest {
         context = new AnnotationConfigApplicationContext();
         context.registerBean("objectMapper", ObjectMapper.class);
         context.registerBean("smsSenderLoadbalancer", RandomSmsLoadBalancer.class);
+        context.register(SmsConfiguration.class);
     }
 
     @After

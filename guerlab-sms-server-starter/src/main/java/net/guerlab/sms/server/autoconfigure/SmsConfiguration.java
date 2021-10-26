@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
@@ -50,10 +51,6 @@ import java.lang.reflect.Method;
 public class SmsConfiguration {
 
     private static String getBasePath(SmsWebProperties properties) {
-        if (properties == null) {
-            return SmsWebProperties.DEFAULT_BASE_PATH;
-        }
-
         String bathPath = StringUtils.trimToNull(properties.getBasePath());
 
         return bathPath == null ? SmsWebProperties.DEFAULT_BASE_PATH : bathPath;
@@ -111,7 +108,7 @@ public class SmsConfiguration {
     @ConditionalOnBean(RequestMappingHandlerMapping.class)
     public void setWebMapping(RequestMappingHandlerMapping mapping, SmsWebProperties properties,
             SmsController controller) throws NoSuchMethodException, SecurityException {
-        if (properties == null || !properties.isEnable()) {
+        if (!properties.isEnable()) {
             return;
         }
 
@@ -171,5 +168,16 @@ public class SmsConfiguration {
     @ConditionalOnMissingBean
     public SendAsyncThreadPoolExecutor sendAsyncThreadPoolExecutor(SmsAsyncProperties properties) {
         return new DefaultSendAsyncThreadPoolExecutor(properties);
+    }
+
+    /**
+     * 创建RestTemplate
+     *
+     * @return RestTemplate
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

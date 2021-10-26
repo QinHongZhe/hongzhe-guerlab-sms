@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -59,7 +60,7 @@ public class VerificationCodeRedisRepository implements VerificationCodeReposito
     }
 
     @Override
-    public VerificationCode findOne(String phone, String identificationCode) {
+    public VerificationCode findOne(String phone, @Nullable String identificationCode) {
         String key = key(phone, identificationCode);
         String data = redisTemplate.opsForValue().get(key);
 
@@ -105,11 +106,11 @@ public class VerificationCodeRedisRepository implements VerificationCodeReposito
     }
 
     @Override
-    public void delete(String phone, String identificationCode) {
+    public void delete(String phone, @Nullable String identificationCode) {
         redisTemplate.delete(key(phone, identificationCode));
     }
 
-    private String key(String phone, String identificationCode) {
+    private String key(String phone, @Nullable String identificationCode) {
         String keyPrefix = StringUtils.trimToNull(properties.getKeyPrefix());
         String tempIdentificationCode = StringUtils.trimToNull(identificationCode);
 

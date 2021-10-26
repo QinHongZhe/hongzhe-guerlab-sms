@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.core.utils.StringUtils;
 import net.guerlab.sms.server.entity.VerificationCode;
 import net.guerlab.sms.server.properties.VerificationCodeMemoryRepositoryProperties;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class VerificationCodeMemoryRepository implements VerificationCodeReposit
     private VerificationCodeMemoryRepositoryProperties properties;
 
     @Override
-    public VerificationCode findOne(String phone, String identificationCode) {
+    public VerificationCode findOne(String phone, @Nullable String identificationCode) {
         String key = key(phone, identificationCode);
         VerificationCode verificationCode = cache.get(key);
 
@@ -74,7 +75,7 @@ public class VerificationCodeMemoryRepository implements VerificationCodeReposit
     }
 
     @Override
-    public void delete(String phone, String identificationCode) {
+    public void delete(String phone, @Nullable String identificationCode) {
         cache.remove(key(phone, identificationCode));
     }
 
@@ -83,7 +84,7 @@ public class VerificationCodeMemoryRepository implements VerificationCodeReposit
         initGcThread();
     }
 
-    private String key(String phone, String identificationCode) {
+    private String key(String phone, @Nullable String identificationCode) {
         if (StringUtils.isBlank(identificationCode)) {
             return phone;
         }

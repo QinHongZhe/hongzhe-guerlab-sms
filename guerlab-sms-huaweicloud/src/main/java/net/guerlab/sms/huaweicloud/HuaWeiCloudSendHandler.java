@@ -19,25 +19,14 @@ import net.guerlab.sms.core.exception.SendClientException;
 import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.core.utils.StringUtils;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.ssl.SSLContextBuilder;
-import org.apache.http.ssl.TrustStrategy;
-import org.apache.http.util.EntityUtils;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
-import javax.net.ssl.SSLContext;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -63,13 +52,13 @@ public class HuaWeiCloudSendHandler extends AbstractSendHandler<HuaWeiCloudPrope
 
     private final ObjectMapper objectMapper;
 
-    private final CloseableHttpClient client;
+    private final RestTemplate restTemplate;
 
     public HuaWeiCloudSendHandler(HuaWeiCloudProperties properties, ApplicationEventPublisher eventPublisher,
-            ObjectMapper objectMapper) {
+            ObjectMapper objectMapper, RestTemplate restTemplate) {
         super(properties, eventPublisher);
         this.objectMapper = objectMapper;
-        client = buildHttpclient();
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -101,6 +90,20 @@ public class HuaWeiCloudSendHandler extends AbstractSendHandler<HuaWeiCloudPrope
         return builder.toString();
     }
 
+    private static String byte2Hex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        String temp;
+        for (byte aByte : bytes) {
+            temp = Integer.toHexString(aByte & 0xFF);
+            if (temp.length() == 1) {
+                sb.append("0");
+            }
+            sb.append(temp);
+        }
+        return sb.toString();
+    }
+
+    @SuppressWarnings("UastIncorrectHttpHeaderInspection")
     @Override
     public boolean send(NoticeData noticeData, Collection<String> phones) {
         String type = noticeData.getType();
@@ -141,15 +144,23 @@ public class HuaWeiCloudSendHandler extends AbstractSendHandler<HuaWeiCloudPrope
         String receiver = receiverBuilder.substring(0, receiverBuilder.length() - 1);
         String templateParas = buildTemplateParas(params);
         String wsseHeader = buildWsseHeader();
-        String body = buildRequestBody(receiver, templateId, templateParas);
+        MultiValueMap<String, String> body = buildRequestBody(receiver, templateId, templateParas);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.set(HttpHeaders.AUTHORIZATION, AUTH_HEADER_VALUE);
+        headers.set("X-WSSE", wsseHeader);
 
         try {
-            HttpResponse response = client.execute(RequestBuilder.create("POST").setUri(properties.getUri())
-                    .addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
-                    .addHeader(HttpHeaders.AUTHORIZATION, AUTH_HEADER_VALUE).addHeader("X-WSSE", wsseHeader)
-                    .setEntity(new StringEntity(body)).build());
+            ResponseEntity<String> httpResponse = restTemplate.exchange(properties.getUri(), HttpMethod.POST, new HttpEntity<>(body, headers), String.class);
 
-            String responseContent = EntityUtils.toString(response.getEntity());
+            if (httpResponse.getBody() == null) {
+                log.debug("response body ie null");
+                publishSendFailEvent(noticeData, phones, new SendFailedException("response body ie null"));
+                return false;
+            }
+
+            String responseContent = httpResponse.getBody();
 
             log.debug("responseContent: {}", responseContent);
 
@@ -169,38 +180,25 @@ public class HuaWeiCloudSendHandler extends AbstractSendHandler<HuaWeiCloudPrope
         }
     }
 
-    private CloseableHttpClient buildHttpclient() {
-        try {
-            TrustStrategy trustStrategy = (x509CertChain, authType) -> true;
-            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(trustStrategy).build();
-
-            return HttpClients.custom().setSSLContext(sslContext).setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
-                    .build();
-        } catch (Exception e) {
-            throw new RuntimeException(e.getLocalizedMessage(), e);
-        }
-    }
-
-    private String buildRequestBody(String receiver, String templateId, String templateParas) {
+    private MultiValueMap<String, String> buildRequestBody(String receiver, String templateId, String templateParas) {
         if (StringUtils.isAnyBlank(receiver, templateId)) {
             throw new SendFailedException("buildRequestBody(): receiver or templateId is null.");
         }
 
         String signature = StringUtils.trimToNull(properties.getSignature());
 
-        List<NameValuePair> keyValues = new ArrayList<>();
-
-        keyValues.add(new BasicNameValuePair("from", properties.getSender()));
-        keyValues.add(new BasicNameValuePair("to", receiver));
-        keyValues.add(new BasicNameValuePair("templateId", templateId));
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("from", properties.getSender());
+        body.add("to", receiver);
+        body.add("templateId", templateId);
         if (templateParas != null) {
-            keyValues.add(new BasicNameValuePair("templateParas", templateParas));
+            body.add("templateParas", templateParas);
         }
         if (signature != null) {
-            keyValues.add(new BasicNameValuePair("signature", signature));
+            body.add("signature", signature);
         }
 
-        return URLEncodedUtils.format(keyValues, StandardCharsets.UTF_8);
+        return body;
     }
 
     /**
@@ -219,12 +217,18 @@ public class HuaWeiCloudSendHandler extends AbstractSendHandler<HuaWeiCloudPrope
         String time = sdf.format(new Date());
         String nonce = UUID.randomUUID().toString().replace("-", "");
 
-        byte[] passwordDigest = DigestUtils.sha256(nonce + time + appSecret);
-        String hexDigest = Hex.encodeHexString(passwordDigest);
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            String str = nonce + time + appSecret;
+            digest.update(str.getBytes(StandardCharsets.UTF_8));
+            String hexDigest = byte2Hex(digest.digest());
 
-        String passwordDigestBase64Str = Base64.getEncoder().encodeToString(hexDigest.getBytes());
+            String passwordDigestBase64Str = Base64.getEncoder().encodeToString(hexDigest.getBytes());
 
-        return String.format(WSSE_HEADER_FORMAT, appKey, passwordDigestBase64Str, nonce, time);
+            return String.format(WSSE_HEADER_FORMAT, appKey, passwordDigestBase64Str, nonce, time);
+        } catch (Exception e) {
+            throw new SendClientException(e.getLocalizedMessage(), e);
+        }
     }
 
     @Override

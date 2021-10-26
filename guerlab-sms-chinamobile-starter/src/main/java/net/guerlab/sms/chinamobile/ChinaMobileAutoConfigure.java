@@ -21,6 +21,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.*;
 import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * 移动云发送端点自动配置
@@ -43,14 +44,17 @@ public class ChinaMobileAutoConfigure {
      *         负载均衡器
      * @param eventPublisher
      *         spring应用事件发布器
+     * @param restTemplate
+     *         RestTemplate
      * @return 移动云发送处理
      */
     @Bean
     @Conditional(ChinaMobileSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)
     public ChinaMobileSendHandler chinaMobileSendHandler(ChinaMobileProperties properties, ObjectMapper objectMapper,
-            SmsSenderLoadBalancer loadbalancer, ApplicationEventPublisher eventPublisher) {
-        ChinaMobileSendHandler handler = new ChinaMobileSendHandler(properties, eventPublisher, objectMapper);
+            SmsSenderLoadBalancer loadbalancer, ApplicationEventPublisher eventPublisher, RestTemplate restTemplate) {
+        ChinaMobileSendHandler handler = new ChinaMobileSendHandler(properties, eventPublisher, objectMapper,
+                restTemplate);
         loadbalancer.addTarget(handler, true);
         loadbalancer.setWeight(handler, properties.getWeight());
         return handler;
@@ -58,7 +62,6 @@ public class ChinaMobileAutoConfigure {
 
     public static class ChinaMobileSendHandlerCondition implements Condition {
 
-        @SuppressWarnings("NullableProblems")
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             Boolean enable = context.getEnvironment().getProperty("sms.chinamobile.enable", Boolean.class);

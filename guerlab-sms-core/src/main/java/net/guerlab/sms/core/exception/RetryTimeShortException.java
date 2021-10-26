@@ -19,7 +19,7 @@ import java.util.Locale;
  *
  * @author guer
  */
-public class RetryTimeShortException extends RuntimeException {
+public class RetryTimeShortException extends SmsException {
 
     private static final long serialVersionUID = 1L;
 

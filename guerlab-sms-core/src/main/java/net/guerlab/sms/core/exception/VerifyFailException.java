@@ -18,9 +18,8 @@ import java.util.Locale;
  * 验证失败
  *
  * @author guer
- *
  */
-public class VerifyFailException extends RuntimeException {
+public class VerifyFailException extends SmsException {
 
     private static final long serialVersionUID = 1L;
 

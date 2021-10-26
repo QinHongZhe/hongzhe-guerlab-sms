@@ -18,20 +18,12 @@ import net.guerlab.sms.core.domain.NoticeData;
 import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
 import net.guerlab.sms.server.utils.RandomUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.ssl.SSLContextBuilder;
-import org.apache.http.ssl.TrustStrategy;
-import org.apache.http.util.EntityUtils;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
-import javax.net.ssl.SSLContext;
 import java.util.*;
 
 /**
@@ -49,13 +41,13 @@ public class NeteaseCloudSendHandler extends AbstractSendHandler<NeteaseCloudPro
 
     private final ObjectMapper objectMapper;
 
-    private final CloseableHttpClient client;
+    private final RestTemplate restTemplate;
 
     public NeteaseCloudSendHandler(NeteaseCloudProperties properties, ApplicationEventPublisher eventPublisher,
-            ObjectMapper objectMapper) {
+            ObjectMapper objectMapper, RestTemplate restTemplate) {
         super(properties, eventPublisher);
         this.objectMapper = objectMapper;
-        client = buildHttpclient();
+        this.restTemplate = restTemplate;
     }
 
     private String buildStringArray(Collection<String> items) {
@@ -75,6 +67,7 @@ public class NeteaseCloudSendHandler extends AbstractSendHandler<NeteaseCloudPro
         return builder.toString();
     }
 
+    @SuppressWarnings("UastIncorrectHttpHeaderInspection")
     @Override
     public boolean send(NoticeData noticeData, Collection<String> phones) {
         String type = noticeData.getType();
@@ -106,23 +99,28 @@ public class NeteaseCloudSendHandler extends AbstractSendHandler<NeteaseCloudPro
         String curTime = String.valueOf((new Date()).getTime() / 1000L);
         String checkSum = CheckSumBuilder.getCheckSum(properties.getAppSecret(), nonce, curTime);
 
-        HttpPost httpPost = new HttpPost(SERVER_URL);
-        httpPost.addHeader("AppKey", properties.getAppKey());
-        httpPost.addHeader("CurTime", curTime);
-        httpPost.addHeader("CheckSum", checkSum);
-        httpPost.addHeader("Nonce", nonce);
-        httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.set("AppKey", properties.getAppKey());
+        headers.set("CurTime", curTime);
+        headers.set("CheckSum", checkSum);
+        headers.set("Nonce", nonce);
 
-        List<NameValuePair> nvps = new ArrayList<>();
-        nvps.add(new BasicNameValuePair("templateid", templateId));
-        nvps.add(new BasicNameValuePair("mobiles", mobilesString));
-        nvps.add(new BasicNameValuePair("params", paramsString));
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("templateid", templateId);
+        body.add("mobiles", mobilesString);
+        body.add("params", paramsString);
 
         try {
-            httpPost.setEntity(new UrlEncodedFormEntity(nvps, "utf-8"));
-            HttpResponse response = client.execute(httpPost);
+            ResponseEntity<String> httpResponse = restTemplate.exchange(SERVER_URL, HttpMethod.POST, new HttpEntity<>(body, headers), String.class);
 
-            String responseContent = EntityUtils.toString(response.getEntity(), "utf-8");
+            if (httpResponse.getBody() == null) {
+                log.debug("response body ie null");
+                publishSendFailEvent(noticeData, phones, new SendFailedException("response body ie null"));
+                return false;
+            }
+
+            String responseContent = httpResponse.getBody();
 
             log.debug("responseContent: {}", responseContent);
 
@@ -139,18 +137,6 @@ public class NeteaseCloudSendHandler extends AbstractSendHandler<NeteaseCloudPro
             log.debug(e.getLocalizedMessage(), e);
             publishSendFailEvent(noticeData, phones, e);
             return false;
-        }
-    }
-
-    private CloseableHttpClient buildHttpclient() {
-        try {
-            TrustStrategy trustStrategy = (x509CertChain, authType) -> true;
-            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(trustStrategy).build();
-
-            return HttpClients.custom().setSSLContext(sslContext).setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
-                    .build();
-        } catch (Exception e) {
-            throw new RuntimeException(e.getLocalizedMessage(), e);
         }
     }
 

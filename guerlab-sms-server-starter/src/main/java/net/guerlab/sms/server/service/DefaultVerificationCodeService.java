@@ -22,10 +22,11 @@ import net.guerlab.sms.server.properties.VerificationCodeProperties;
 import net.guerlab.sms.server.repository.VerificationCodeRepository;
 import net.guerlab.sms.server.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -35,6 +36,7 @@ import java.util.Objects;
  *
  * @author guer
  */
+@SuppressWarnings("AlibabaServiceOrDaoClassShouldEndWithImpl")
 @Service
 public class DefaultVerificationCodeService implements VerificationCodeService {
 
@@ -86,6 +88,7 @@ public class DefaultVerificationCodeService implements VerificationCodeService {
         return verificationCode == null ? null : verificationCode.getCode();
     }
 
+    @Nullable
     private String createIdentificationCode() {
         if (!properties.isUseIdentificationCode()) {
             return null;
@@ -95,7 +98,7 @@ public class DefaultVerificationCodeService implements VerificationCodeService {
     }
 
     @Override
-    public void send(String tempPhone) {
+    public void send(String tempPhone, @Nullable String type) {
         String phone = StringUtils.trimToNull(tempPhone);
 
         if (phone == null) {
@@ -105,86 +108,35 @@ public class DefaultVerificationCodeService implements VerificationCodeService {
         phoneValidation(phone);
 
         String identificationCode = createIdentificationCode();
-        VerificationCode verificationCode = repository.findOne(phone, identificationCode);
-        boolean newVerificationCode = false;
+        VerificationCodeCheckResult verificationCodeCheckResult = verificationCodeCheck(phone, identificationCode);
+        VerificationCode verificationCode = verificationCodeCheckResult.verificationCode;
 
-        Long expirationTime = properties.getExpirationTime();
+        Map<String, String> params = buildSendParams(verificationCode);
 
-        if (verificationCode == null) {
-            verificationCode = new VerificationCode();
-            verificationCode.setPhone(phone);
-            verificationCode.setIdentificationCode(identificationCode);
-
-            Long retryIntervalTime = properties.getRetryIntervalTime();
-
-            if (expirationTime != null && expirationTime > 0) {
-                verificationCode.setExpirationTime(LocalDateTime.now().plusSeconds(expirationTime));
-            }
-            if (retryIntervalTime != null && retryIntervalTime > 0) {
-                verificationCode.setRetryTime(LocalDateTime.now().plusSeconds(retryIntervalTime));
-            }
-
-            verificationCode.setCode(codeGenerate.generate());
-            newVerificationCode = true;
-        } else {
-            LocalDateTime retryTime = verificationCode.getRetryTime();
-
-            if (retryTime != null) {
-                long surplus =
-                        retryTime.toEpochSecond(ZoneOffset.UTC) - LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
-
-                if (surplus > 0) {
-                    throw new RetryTimeShortException(surplus);
-                }
-            }
-        }
-
-        Map<String, String> params = new HashMap<>(4);
-        params.put(MSG_KEY_CODE, verificationCode.getCode());
-        if (verificationCode.getIdentificationCode() != null) {
-            params.put(MSG_KEY_IDENTIFICATION_CODE, verificationCode.getIdentificationCode());
-        }
-        if (properties.isTemplateHasExpirationTime() && expirationTime != null && expirationTime > 0) {
-            params.put(MSG_KEY_EXPIRATION_TIME_OF_SECONDS, String.valueOf(expirationTime));
-            params.put(MSG_KEY_EXPIRATION_TIME_OF_MINUTES, String.valueOf(expirationTime / 60));
-        }
-
-        String type = null;
-        if (verificationCodeTypeGenerate != null) {
+        if (type == null && verificationCodeTypeGenerate != null) {
             type = verificationCodeTypeGenerate.getType(phone, params);
         }
         if (type == null) {
             type = properties.getType();
         }
+        if (type == null) {
+            throw new TypeIsNullException();
+        }
 
         NoticeData notice = new NoticeData();
         notice.setType(type);
         notice.setParams(params);
 
-        if (noticeService.send(notice, phone) && newVerificationCode) {
+        if (noticeService.send(notice, phone) && verificationCodeCheckResult.newVerificationCode) {
             repository.save(verificationCode);
         }
     }
 
-    @Override
-    public void send(String tempPhone, String type) {
-        String phone = StringUtils.trimToNull(tempPhone);
-
-        if (phone == null) {
-            throw new PhoneIsNullException();
-        }
-        if (type == null) {
-            throw new TypeIsNullException();
-        }
-
-        phoneValidation(phone);
-
-        String identificationCode = createIdentificationCode();
+    private VerificationCodeCheckResult verificationCodeCheck(String phone, @Nullable String identificationCode) {
         VerificationCode verificationCode = repository.findOne(phone, identificationCode);
-        boolean newVerificationCode = false;
-
         Long expirationTime = properties.getExpirationTime();
 
+        boolean newVerificationCode = false;
         if (verificationCode == null) {
             verificationCode = new VerificationCode();
             verificationCode.setPhone(phone);
@@ -205,15 +157,22 @@ public class DefaultVerificationCodeService implements VerificationCodeService {
             LocalDateTime retryTime = verificationCode.getRetryTime();
 
             if (retryTime != null) {
-                long surplus =
-                        retryTime.toEpochSecond(ZoneOffset.UTC) - LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
-
+                long surplus = Duration.between(LocalDateTime.now(), retryTime).getSeconds();
                 if (surplus > 0) {
                     throw new RetryTimeShortException(surplus);
                 }
             }
         }
 
+        VerificationCodeCheckResult result = new VerificationCodeCheckResult();
+        result.verificationCode = verificationCode;
+        result.newVerificationCode = newVerificationCode;
+
+        return result;
+    }
+
+    private Map<String, String> buildSendParams(VerificationCode verificationCode) {
+        Long expirationTime = properties.getExpirationTime();
         Map<String, String> params = new HashMap<>(4);
         params.put(MSG_KEY_CODE, verificationCode.getCode());
         if (verificationCode.getIdentificationCode() != null) {
@@ -223,18 +182,18 @@ public class DefaultVerificationCodeService implements VerificationCodeService {
             params.put(MSG_KEY_EXPIRATION_TIME_OF_SECONDS, String.valueOf(expirationTime));
             params.put(MSG_KEY_EXPIRATION_TIME_OF_MINUTES, String.valueOf(expirationTime / 60));
         }
+        return params;
+    }
 
-        NoticeData notice = new NoticeData();
-        notice.setType(type);
-        notice.setParams(params);
+    private static class VerificationCodeCheckResult {
 
-        if (noticeService.send(notice, phone) && newVerificationCode) {
-            repository.save(verificationCode);
-        }
+        VerificationCode verificationCode;
+
+        boolean newVerificationCode;
     }
 
     @Override
-    public boolean verify(String phone, String code, String identificationCode) {
+    public boolean verify(String phone, String code, @Nullable String identificationCode) {
         if (StringUtils.isAnyBlank(phone, code)) {
             return false;
         }

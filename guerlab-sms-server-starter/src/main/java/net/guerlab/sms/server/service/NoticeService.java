@@ -25,6 +25,7 @@ import java.util.Collections;
  * @author guer
  *
  */
+@SuppressWarnings("unused")
 public interface NoticeService {
 
     /**
@@ -74,7 +75,7 @@ public interface NoticeService {
      * @return 是否发送成功
      */
     default boolean send(NoticeData noticeData, String... phones) {
-        if (phones == null || phones.length <= 0) {
+        if (phones.length <= 0) {
             return false;
         }
 
@@ -114,7 +115,7 @@ public interface NoticeService {
      *         手机号列表
      */
     default void asyncSend(NoticeData noticeData, String... phones) {
-        if (phones != null && phones.length > 0) {
+        if (phones.length > 0) {
             asyncSend(noticeData, Arrays.asList(phones));
         }
     }

@@ -21,6 +21,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.*;
 import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * 网易云信发送端点自动配置
@@ -43,14 +44,17 @@ public class NeteaseCloudAutoConfigure {
      *         负载均衡器
      * @param eventPublisher
      *         spring应用事件发布器
+     * @param restTemplate
+     *         RestTemplate
      * @return 网易云信发送处理
      */
     @Bean
     @Conditional(NeteaseCloudSendHandlerCondition.class)
     @ConditionalOnBean(SmsSenderLoadBalancer.class)
     public NeteaseCloudSendHandler neteaseCloudSendHandler(NeteaseCloudProperties properties, ObjectMapper objectMapper,
-            SmsSenderLoadBalancer loadbalancer, ApplicationEventPublisher eventPublisher) {
-        NeteaseCloudSendHandler handler = new NeteaseCloudSendHandler(properties, eventPublisher, objectMapper);
+            SmsSenderLoadBalancer loadbalancer, ApplicationEventPublisher eventPublisher, RestTemplate restTemplate) {
+        NeteaseCloudSendHandler handler = new NeteaseCloudSendHandler(properties, eventPublisher, objectMapper,
+                restTemplate);
         loadbalancer.addTarget(handler, true);
         loadbalancer.setWeight(handler, properties.getWeight());
         return handler;
@@ -58,7 +62,6 @@ public class NeteaseCloudAutoConfigure {
 
     public static class NeteaseCloudSendHandlerCondition implements Condition {
 
-        @SuppressWarnings("NullableProblems")
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             Boolean enable = context.getEnvironment().getProperty("sms.netease.enable", Boolean.class);

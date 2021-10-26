@@ -14,6 +14,7 @@ package net.guerlab.sms.server.service;
 
 import net.guerlab.sms.server.properties.RejectPolicy;
 import net.guerlab.sms.server.properties.SmsAsyncProperties;
+import org.springframework.lang.Nullable;
 
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
@@ -40,7 +41,7 @@ public abstract class AbstractSendAsyncThreadPoolExecutor implements SendAsyncTh
      *         拒绝策略
      * @return 拒绝处理程序
      */
-    protected static RejectedExecutionHandler buildRejectedExecutionHandler(RejectPolicy type) {
+    protected static RejectedExecutionHandler buildRejectedExecutionHandler(@Nullable RejectPolicy type) {
         if (type == null) {
             return new ThreadPoolExecutor.AbortPolicy();
         }
@@ -64,9 +65,7 @@ public abstract class AbstractSendAsyncThreadPoolExecutor implements SendAsyncTh
      */
     @Override
     public final void submit(Runnable command) {
-        if (command != null) {
-            submit0(command);
-        }
+        submit0(command);
     }
 
     /**

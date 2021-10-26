@@ -18,25 +18,16 @@ import net.guerlab.sms.core.domain.NoticeData;
 import net.guerlab.sms.core.exception.SendFailedException;
 import net.guerlab.sms.core.utils.StringUtils;
 import net.guerlab.sms.server.handler.AbstractSendHandler;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContextBuilder;
-import org.apache.http.ssl.TrustStrategy;
-import org.apache.http.util.EntityUtils;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.DigestUtils;
+import org.springframework.web.client.RestTemplate;
 
-import javax.net.ssl.SSLContext;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 移动云发送处理
@@ -50,13 +41,13 @@ public class ChinaMobileSendHandler extends AbstractSendHandler<ChinaMobilePrope
 
     private final ObjectMapper objectMapper;
 
-    private final CloseableHttpClient client;
+    private final RestTemplate restTemplate;
 
     public ChinaMobileSendHandler(ChinaMobileProperties properties, ApplicationEventPublisher eventPublisher,
-            ObjectMapper objectMapper) {
+            ObjectMapper objectMapper, RestTemplate restTemplate) {
         super(properties, eventPublisher);
         this.objectMapper = objectMapper;
-        client = buildHttpclient();
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -68,7 +59,7 @@ public class ChinaMobileSendHandler extends AbstractSendHandler<ChinaMobilePrope
      */
     private static String buildTemplateParas(Collection<String> params) {
         if (params == null || params.isEmpty()) {
-            return null;
+            return "[\"\"]";
         }
 
         boolean firstParam = true;
@@ -91,7 +82,7 @@ public class ChinaMobileSendHandler extends AbstractSendHandler<ChinaMobilePrope
     private static String buildMac(String ecName, String apId, String secretKey, String templateId, String mobiles,
             String params, String sign) {
         String origin = ecName + apId + secretKey + templateId + mobiles + params + sign;
-        return DigestUtils.md5Hex(origin);
+        return DigestUtils.md5DigestAsHex(origin.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
@@ -133,11 +124,18 @@ public class ChinaMobileSendHandler extends AbstractSendHandler<ChinaMobilePrope
         String body = buildRequestBody(mobiles, templateId, paramsString);
 
         try {
-            HttpResponse response = client.execute(
-                    RequestBuilder.create("POST").setUri(properties.getUri()).setEntity(new StringEntity(body))
-                            .build());
+            HttpEntity<String> httpEntity = new HttpEntity<>(body, new HttpHeaders());
 
-            String responseContent = EntityUtils.toString(response.getEntity());
+            ResponseEntity<String> httpResponse = restTemplate
+                    .exchange(properties.getUri(), HttpMethod.POST, httpEntity, String.class);
+
+            if (httpResponse.getBody() == null) {
+                log.debug("response body ie null");
+                publishSendFailEvent(noticeData, phones, new SendFailedException("response body ie null"));
+                return false;
+            }
+
+            String responseContent = httpResponse.getBody();
 
             log.debug("responseContent: {}", responseContent);
 
@@ -157,18 +155,6 @@ public class ChinaMobileSendHandler extends AbstractSendHandler<ChinaMobilePrope
         }
     }
 
-    private CloseableHttpClient buildHttpclient() {
-        try {
-            TrustStrategy trustStrategy = (x509CertChain, authType) -> true;
-            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(trustStrategy).build();
-
-            return HttpClients.custom().setSSLContext(sslContext).setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
-                    .build();
-        } catch (Exception e) {
-            throw new RuntimeException(e.getLocalizedMessage(), e);
-        }
-    }
-
     private String buildRequestBody(String mobiles, String templateId, String paramsString) {
         if (StringUtils.isAnyBlank(mobiles, templateId)) {
             throw new SendFailedException("buildRequestBody(): mobiles or templateId is null.");
@@ -184,7 +170,7 @@ public class ChinaMobileSendHandler extends AbstractSendHandler<ChinaMobilePrope
                 .format(BODY_TEMPLATE, ecName, apId, templateId, mobiles, paramsString.replace("\"", "\\\""), sign,
                         mac);
 
-        return Base64.encodeBase64String(body.getBytes(StandardCharsets.UTF_8));
+        return new String(Base64.getEncoder().encode(body.getBytes(StandardCharsets.UTF_8)));
     }
 
     @Override

@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.guerlab.loadbalancer.ILoadBalancer;
 import net.guerlab.sms.core.domain.NoticeData;
 import net.guerlab.sms.core.exception.NotFindSendHandlerException;
+import net.guerlab.sms.core.exception.SmsException;
 import net.guerlab.sms.core.handler.SendHandler;
 import net.guerlab.sms.core.utils.StringUtils;
 import net.guerlab.sms.server.properties.SmsAsyncProperties;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
  *
  * @author guer
  */
+@SuppressWarnings("AlibabaServiceOrDaoClassShouldEndWithImpl")
 @Slf4j
 @Service
 public class DefaultNoticeService implements NoticeService {
@@ -73,12 +75,7 @@ public class DefaultNoticeService implements NoticeService {
 
     private SendResult send0(NoticeData noticeData, Collection<String> phones) {
         SendResult result = new SendResult();
-        if (noticeData == null) {
-            log.debug("noticeData is null");
-            return result;
-        }
-
-        if (phones == null || phones.isEmpty()) {
+        if (phones.isEmpty()) {
             log.debug("phones is empty");
             return result;
         }
@@ -94,9 +91,18 @@ public class DefaultNoticeService implements NoticeService {
 
         if (sendHandler == null) {
             result.exception = new NotFindSendHandlerException();
-            log.debug(result.exception.getLocalizedMessage());
         } else {
-            result.result = sendHandler.send(noticeData, phones);
+            try {
+                result.result = sendHandler.send(noticeData, phones);
+            } catch (RuntimeException e) {
+                result.exception = e;
+            } catch (Exception e) {
+                result.exception = new SmsException(e.getLocalizedMessage(), e);
+            }
+        }
+
+        if (result.exception != null) {
+            log.debug(result.exception.getLocalizedMessage());
         }
 
         return result;

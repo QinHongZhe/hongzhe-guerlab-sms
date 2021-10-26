@@ -34,7 +34,7 @@ public interface SmsSenderLoadBalancer extends ILoadBalancer<SendHandler, Notice
      * @return 是否允许使用该发送类型
      */
     static boolean chooseFilter(TargetWrapper<SendHandler> targetWrapper, NoticeData noticeData) {
-        if (noticeData == null || noticeData.getType() == null || targetWrapper.getTarget() == null) {
+        if (noticeData.getType() == null || targetWrapper.getTarget() == null) {
             return false;
         }
         return targetWrapper.getTarget().acceptSend(noticeData.getType());

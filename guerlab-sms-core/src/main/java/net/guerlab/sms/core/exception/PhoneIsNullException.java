@@ -18,9 +18,8 @@ import java.util.Locale;
  * 手机号无效
  *
  * @author guer
- *
  */
-public class PhoneIsNullException extends RuntimeException {
+public class PhoneIsNullException extends SmsException {
 
     private static final long serialVersionUID = 1L;
 

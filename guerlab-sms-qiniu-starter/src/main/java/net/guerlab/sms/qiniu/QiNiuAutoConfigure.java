@@ -55,7 +55,6 @@ public class QiNiuAutoConfigure {
 
     public static class QiNiuSendHandlerCondition implements Condition {
 
-        @SuppressWarnings("NullableProblems")
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             Boolean enable = context.getEnvironment().getProperty("sms.qiniu.enable", Boolean.class);
