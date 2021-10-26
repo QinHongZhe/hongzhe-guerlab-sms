@@ -12,6 +12,8 @@
  */
 package net.guerlab.sms.server.utils;
 
+import org.springframework.lang.Nullable;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
@@ -54,7 +56,7 @@ public final class RandomUtils {
      *         取值范围
      * @return 随机字符串
      */
-    public static String nextString(final int length, final char[] chars) {
+    public static String nextString(final int length, @Nullable final char[] chars) {
         if (length <= 0) {
             return "";
         }

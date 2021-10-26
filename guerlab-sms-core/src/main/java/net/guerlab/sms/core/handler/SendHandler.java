@@ -12,6 +12,7 @@
  */
 package net.guerlab.sms.core.handler;
 
+import jdk.internal.jline.internal.Nullable;
 import net.guerlab.sms.core.domain.NoticeData;
 import net.guerlab.sms.core.utils.StringUtils;
 
@@ -33,7 +34,7 @@ public interface SendHandler {
      *         通知类型
      * @return 是否允许
      */
-    boolean acceptSend(String type);
+    boolean acceptSend(@Nullable String type);
 
     /**
      * 发送通知

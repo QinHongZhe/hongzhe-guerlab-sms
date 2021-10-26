@@ -14,6 +14,7 @@ package net.guerlab.sms.server.properties;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,7 @@ public abstract class AbstractHandlerProperties<T> {
      *         类型
      * @return 短信模板
      */
+    @Nullable
     public final T getTemplates(String type) {
         return templates == null ? null : templates.get(type);
     }

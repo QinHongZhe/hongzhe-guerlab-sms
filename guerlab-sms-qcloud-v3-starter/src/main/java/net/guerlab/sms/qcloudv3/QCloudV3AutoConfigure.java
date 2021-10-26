@@ -57,7 +57,6 @@ public class QCloudV3AutoConfigure {
     @SuppressWarnings("AlibabaClassNamingShouldBeCamel")
     public static class QCloudV3SendHandlerCondition implements Condition {
 
-        @SuppressWarnings("NullableProblems")
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             Boolean enable = context.getEnvironment().getProperty("sms.qcloud-v3.enable", Boolean.class);

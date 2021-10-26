@@ -62,7 +62,6 @@ public class NeteaseCloudAutoConfigure {
 
     public static class NeteaseCloudSendHandlerCondition implements Condition {
 
-        @SuppressWarnings("NullableProblems")
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             Boolean enable = context.getEnvironment().getProperty("sms.netease.enable", Boolean.class);

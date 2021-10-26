@@ -13,6 +13,7 @@
 package net.guerlab.sms.server.repository;
 
 import net.guerlab.sms.server.entity.VerificationCode;
+import org.springframework.lang.Nullable;
 
 /**
  * 验证码储存接口
@@ -30,7 +31,8 @@ public interface VerificationCodeRepository {
      *         识别码
      * @return 验证码
      */
-    VerificationCode findOne(String phone, String identificationCode);
+    @Nullable
+    VerificationCode findOne(String phone, @Nullable String identificationCode);
 
     /**
      * 保存验证码
@@ -44,10 +46,10 @@ public interface VerificationCodeRepository {
      * 删除验证码
      *
      * @param phone
-     *            手机号码
+     *         手机号码
      * @param identificationCode
-     *            识别码
+     *         识别码
      */
-    void delete(String phone, String identificationCode);
+    void delete(String phone, @Nullable String identificationCode);
 
 }

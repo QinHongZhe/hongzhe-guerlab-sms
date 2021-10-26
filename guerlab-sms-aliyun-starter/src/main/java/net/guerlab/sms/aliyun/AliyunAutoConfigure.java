@@ -59,7 +59,6 @@ public class AliyunAutoConfigure {
 
     public static class AliyunSendHandlerCondition implements Condition {
 
-        @SuppressWarnings("NullableProblems")
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             Boolean enable = context.getEnvironment().getProperty("sms.aliyun.enable", Boolean.class);

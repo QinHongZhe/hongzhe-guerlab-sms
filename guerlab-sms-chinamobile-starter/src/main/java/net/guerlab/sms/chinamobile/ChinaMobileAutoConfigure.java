@@ -62,7 +62,6 @@ public class ChinaMobileAutoConfigure {
 
     public static class ChinaMobileSendHandlerCondition implements Condition {
 
-        @SuppressWarnings("NullableProblems")
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             Boolean enable = context.getEnvironment().getProperty("sms.chinamobile.enable", Boolean.class);

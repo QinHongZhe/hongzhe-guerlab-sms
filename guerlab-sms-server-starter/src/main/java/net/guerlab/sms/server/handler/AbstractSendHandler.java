@@ -19,6 +19,7 @@ import net.guerlab.sms.server.entity.SmsSendFinallyEvent;
 import net.guerlab.sms.server.entity.SmsSendSuccessEvent;
 import net.guerlab.sms.server.properties.AbstractHandlerProperties;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.lang.Nullable;
 
 import java.util.Collection;
 
@@ -35,13 +36,13 @@ public abstract class AbstractSendHandler<P extends AbstractHandlerProperties<?>
 
     private final ApplicationEventPublisher eventPublisher;
 
-    public AbstractSendHandler(P properties, ApplicationEventPublisher eventPublisher) {
+    public AbstractSendHandler(P properties, @Nullable ApplicationEventPublisher eventPublisher) {
         this.properties = properties;
         this.eventPublisher = eventPublisher;
     }
 
     @Override
-    public boolean acceptSend(String type) {
+    public boolean acceptSend(@Nullable String type) {
         return properties.getTemplates().containsKey(type);
     }
 
@@ -98,6 +99,9 @@ public abstract class AbstractSendHandler<P extends AbstractHandlerProperties<?>
      *         手机号列表
      */
     private void publishSendFinallyEvent(NoticeData noticeData, Collection<String> phones) {
+        if (eventPublisher == null) {
+            return;
+        }
         eventPublisher.publishEvent(
                 new SmsSendFinallyEvent(this, getChannelName(), phones, noticeData.getType(), noticeData.getParams()));
     }

@@ -103,6 +103,7 @@ public class HuaWeiCloudSendHandler extends AbstractSendHandler<HuaWeiCloudPrope
         return sb.toString();
     }
 
+    @SuppressWarnings("UastIncorrectHttpHeaderInspection")
     @Override
     public boolean send(NoticeData noticeData, Collection<String> phones) {
         String type = noticeData.getType();
@@ -151,8 +152,7 @@ public class HuaWeiCloudSendHandler extends AbstractSendHandler<HuaWeiCloudPrope
         headers.set("X-WSSE", wsseHeader);
 
         try {
-            ResponseEntity<String> httpResponse = restTemplate
-                    .exchange(properties.getUri(), HttpMethod.POST, new HttpEntity<>(body, headers), String.class);
+            ResponseEntity<String> httpResponse = restTemplate.exchange(properties.getUri(), HttpMethod.POST, new HttpEntity<>(body, headers), String.class);
 
             if (httpResponse.getBody() == null) {
                 log.debug("response body ie null");

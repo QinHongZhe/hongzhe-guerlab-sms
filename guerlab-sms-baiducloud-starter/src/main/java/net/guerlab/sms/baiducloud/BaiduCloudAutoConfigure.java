@@ -55,7 +55,6 @@ public class BaiduCloudAutoConfigure {
 
     public static class BaiduCloudSendHandlerCondition implements Condition {
 
-        @SuppressWarnings("NullableProblems")
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             Boolean enable = context.getEnvironment().getProperty("sms.baiducloud.enable", Boolean.class);

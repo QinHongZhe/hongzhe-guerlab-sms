@@ -67,6 +67,7 @@ public class NeteaseCloudSendHandler extends AbstractSendHandler<NeteaseCloudPro
         return builder.toString();
     }
 
+    @SuppressWarnings("UastIncorrectHttpHeaderInspection")
     @Override
     public boolean send(NoticeData noticeData, Collection<String> phones) {
         String type = noticeData.getType();
@@ -111,8 +112,7 @@ public class NeteaseCloudSendHandler extends AbstractSendHandler<NeteaseCloudPro
         body.add("params", paramsString);
 
         try {
-            ResponseEntity<String> httpResponse = restTemplate
-                    .exchange(SERVER_URL, HttpMethod.POST, new HttpEntity<>(body, headers), String.class);
+            ResponseEntity<String> httpResponse = restTemplate.exchange(SERVER_URL, HttpMethod.POST, new HttpEntity<>(body, headers), String.class);
 
             if (httpResponse.getBody() == null) {
                 log.debug("response body ie null");

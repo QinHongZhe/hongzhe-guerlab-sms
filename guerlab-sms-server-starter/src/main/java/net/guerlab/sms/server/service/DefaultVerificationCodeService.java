@@ -22,6 +22,7 @@ import net.guerlab.sms.server.properties.VerificationCodeProperties;
 import net.guerlab.sms.server.repository.VerificationCodeRepository;
 import net.guerlab.sms.server.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,7 @@ import java.util.Objects;
  *
  * @author guer
  */
+@SuppressWarnings("AlibabaServiceOrDaoClassShouldEndWithImpl")
 @Service
 public class DefaultVerificationCodeService implements VerificationCodeService {
 
@@ -86,6 +88,7 @@ public class DefaultVerificationCodeService implements VerificationCodeService {
         return verificationCode == null ? null : verificationCode.getCode();
     }
 
+    @Nullable
     private String createIdentificationCode() {
         if (!properties.isUseIdentificationCode()) {
             return null;
@@ -234,7 +237,7 @@ public class DefaultVerificationCodeService implements VerificationCodeService {
     }
 
     @Override
-    public boolean verify(String phone, String code, String identificationCode) {
+    public boolean verify(String phone, String code, @Nullable String identificationCode) {
         if (StringUtils.isAnyBlank(phone, code)) {
             return false;
         }

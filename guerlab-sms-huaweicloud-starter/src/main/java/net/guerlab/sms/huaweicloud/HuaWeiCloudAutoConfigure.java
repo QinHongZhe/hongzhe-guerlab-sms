@@ -61,7 +61,6 @@ public class HuaWeiCloudAutoConfigure {
 
     public static class HuaWeiCloudSendHandlerCondition implements Condition {
 
-        @SuppressWarnings("NullableProblems")
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             Boolean enable = context.getEnvironment().getProperty("sms.huawei.enable", Boolean.class);

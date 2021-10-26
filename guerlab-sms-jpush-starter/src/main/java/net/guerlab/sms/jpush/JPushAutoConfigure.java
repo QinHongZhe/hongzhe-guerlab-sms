@@ -62,7 +62,6 @@ public class JPushAutoConfigure {
 
     public static class JPushSendHandlerCondition implements Condition {
 
-        @SuppressWarnings("NullableProblems")
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             Boolean enable = context.getEnvironment().getProperty("sms.jpush.enable", Boolean.class);

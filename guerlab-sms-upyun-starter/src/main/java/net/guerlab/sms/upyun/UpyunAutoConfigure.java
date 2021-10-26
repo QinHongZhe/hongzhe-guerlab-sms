@@ -61,7 +61,6 @@ public class UpyunAutoConfigure {
 
     public static class UpyunSendHandlerCondition implements Condition {
 
-        @SuppressWarnings("NullableProblems")
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             Boolean enable = context.getEnvironment().getProperty("sms.upyun.enable", Boolean.class);

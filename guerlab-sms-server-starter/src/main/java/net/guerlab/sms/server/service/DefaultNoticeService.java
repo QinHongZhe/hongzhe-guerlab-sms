@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
  *
  * @author guer
  */
+@SuppressWarnings("AlibabaServiceOrDaoClassShouldEndWithImpl")
 @Slf4j
 @Service
 public class DefaultNoticeService implements NoticeService {
@@ -73,12 +74,7 @@ public class DefaultNoticeService implements NoticeService {
 
     private SendResult send0(NoticeData noticeData, Collection<String> phones) {
         SendResult result = new SendResult();
-        if (noticeData == null) {
-            log.debug("noticeData is null");
-            return result;
-        }
-
-        if (phones == null || phones.isEmpty()) {
+        if (phones.isEmpty()) {
             log.debug("phones is empty");
             return result;
         }

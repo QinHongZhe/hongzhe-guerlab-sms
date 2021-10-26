@@ -55,7 +55,6 @@ public class YunPianAutoConfigure {
 
     public static class YunPianSendHandlerCondition implements Condition {
 
-        @SuppressWarnings("NullableProblems")
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             Boolean enable = context.getEnvironment().getProperty("sms.yunpian.enable", Boolean.class);

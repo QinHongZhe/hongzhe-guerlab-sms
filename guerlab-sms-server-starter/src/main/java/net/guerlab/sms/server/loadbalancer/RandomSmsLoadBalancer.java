@@ -16,6 +16,7 @@ import net.guerlab.loadbalancer.RandomLoadBalancer;
 import net.guerlab.loadbalancer.TargetWrapper;
 import net.guerlab.sms.core.domain.NoticeData;
 import net.guerlab.sms.core.handler.SendHandler;
+import org.springframework.lang.Nullable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,10 +31,10 @@ public class RandomSmsLoadBalancer extends RandomLoadBalancer<SendHandler, Notic
 
     public static final String TYPE_NAME = "Random";
 
+    @Nullable
     @Override
     protected SendHandler choose0(List<TargetWrapper<SendHandler>> activeTargetList, NoticeData chooseReferenceObject) {
-        List<TargetWrapper<SendHandler>> newActiveTargetList = activeTargetList.stream()
-                .filter(wrapper -> SmsSenderLoadBalancer.chooseFilter(wrapper, chooseReferenceObject))
+        List<TargetWrapper<SendHandler>> newActiveTargetList = activeTargetList.stream().filter(wrapper -> SmsSenderLoadBalancer.chooseFilter(wrapper, chooseReferenceObject))
                 .collect(Collectors.toList());
         if (newActiveTargetList.isEmpty()) {
             return null;

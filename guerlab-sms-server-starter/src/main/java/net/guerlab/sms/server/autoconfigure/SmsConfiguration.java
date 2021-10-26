@@ -51,10 +51,6 @@ import java.lang.reflect.Method;
 public class SmsConfiguration {
 
     private static String getBasePath(SmsWebProperties properties) {
-        if (properties == null) {
-            return SmsWebProperties.DEFAULT_BASE_PATH;
-        }
-
         String bathPath = StringUtils.trimToNull(properties.getBasePath());
 
         return bathPath == null ? SmsWebProperties.DEFAULT_BASE_PATH : bathPath;
@@ -112,7 +108,7 @@ public class SmsConfiguration {
     @ConditionalOnBean(RequestMappingHandlerMapping.class)
     public void setWebMapping(RequestMappingHandlerMapping mapping, SmsWebProperties properties,
             SmsController controller) throws NoSuchMethodException, SecurityException {
-        if (properties == null || !properties.isEnable()) {
+        if (!properties.isEnable()) {
             return;
         }
 
