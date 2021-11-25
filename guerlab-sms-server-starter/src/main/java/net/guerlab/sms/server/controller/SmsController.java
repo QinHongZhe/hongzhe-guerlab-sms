@@ -19,7 +19,6 @@ import net.guerlab.sms.core.exception.VerifyFailException;
 import net.guerlab.sms.core.utils.StringUtils;
 import net.guerlab.sms.server.service.NoticeService;
 import net.guerlab.sms.server.service.VerificationCodeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,20 +35,15 @@ public class SmsController {
     /**
      * 手机验证码服务
      */
-    private VerificationCodeService verificationCodeService;
+    private final VerificationCodeService verificationCodeService;
 
     /**
      * 短信通知服务
      */
-    private NoticeService noticeService;
+    private final NoticeService noticeService;
 
-    @Autowired
-    public void setVerificationCodeService(VerificationCodeService verificationCodeService) {
+    public SmsController(VerificationCodeService verificationCodeService, NoticeService noticeService) {
         this.verificationCodeService = verificationCodeService;
-    }
-
-    @Autowired
-    public void setNoticeService(NoticeService noticeService) {
         this.noticeService = noticeService;
     }
 

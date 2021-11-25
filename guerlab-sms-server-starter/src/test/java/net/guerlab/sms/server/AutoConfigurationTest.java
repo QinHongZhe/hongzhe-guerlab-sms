@@ -13,6 +13,8 @@
 package net.guerlab.sms.server;
 
 import net.guerlab.sms.server.autoconfigure.SmsConfiguration;
+import net.guerlab.sms.server.autoconfigure.SmsControllerPathConfiguration;
+import net.guerlab.sms.server.controller.SmsController;
 import net.guerlab.sms.server.loadbalancer.SmsSenderLoadBalancer;
 import net.guerlab.sms.server.repository.VerificationCodeRepository;
 import net.guerlab.sms.server.service.CodeGenerate;
@@ -41,6 +43,7 @@ public class AutoConfigurationTest {
     public void setUp() {
         context = new AnnotationConfigApplicationContext();
         context.register(SmsConfiguration.class);
+        context.register(SmsControllerPathConfiguration.class);
     }
 
     @After
@@ -84,5 +87,12 @@ public class AutoConfigurationTest {
         TestPropertyValues.of("sms.async.enable=false").applyTo(context);
         context.refresh();
         context.getBean(SendAsyncThreadPoolExecutor.class);
+    }
+
+    @Test
+    public void controller() {
+        TestPropertyValues.of("sms.web.enable=true").applyTo(context);
+        context.refresh();
+        Assert.assertNotNull(context.getBean(SmsController.class));
     }
 }
