@@ -12,8 +12,8 @@
  */
 package net.guerlab.sms.qcloudv3;
 
-import net.guerlab.sms.server.autoconfigure.SmsConfiguration;
 import net.guerlab.sms.server.loadbalancer.SmsSenderLoadBalancer;
+import net.guerlab.sms.server.spring.autoconfigure.SmsAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -29,7 +29,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 @SuppressWarnings("AlibabaClassNamingShouldBeCamel")
 @Configuration
 @EnableConfigurationProperties(QCloudV3Properties.class)
-@AutoConfigureAfter(SmsConfiguration.class)
+@AutoConfigureAfter(SmsAutoConfiguration.class)
 public class QCloudV3AutoConfigure {
 
     /**

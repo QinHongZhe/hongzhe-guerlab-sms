@@ -2,8 +2,8 @@
   "groups": [
     {
       "name": "sms.verification-code.repository.redis",
-      "type": "net.guerlab.sms.server.properties.RedisProperties",
-      "sourceType": "net.guerlab.sms.server.properties.RedisProperties",
+      "type": "net.guerlab.sms.server.spring.redis.properties.RedisProperties",
+      "sourceType": "net.guerlab.sms.server.spring.redis.properties.RedisProperties",
       "description": "Redis配置."
     }
   ],
@@ -11,7 +11,7 @@
     {
       "name": "sms.verification-code.repository.redis.key-prefix",
       "type": "java.lang.String",
-      "sourceType": "net.guerlab.sms.server.properties.RedisProperties",
+      "sourceType": "net.guerlab.sms.server.spring.redis.properties.RedisProperties",
       "description": "Key前缀."
     }
   ]

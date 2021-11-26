@@ -1,0 +1,208 @@
+{
+  "groups": [
+    {
+      "name": "sms",
+      "type": "net.guerlab.sms.server.properties.SmsConfig",
+      "sourceType": "net.guerlab.sms.server.properties.SmsConfig",
+      "description": "短信配置."
+    },
+    {
+      "name": "sms.web",
+      "type": "net.guerlab.sms.server.properties.SmsWebConfig",
+      "sourceType": "net.guerlab.sms.server.properties.SmsWebConfig",
+      "description": "短信Web配置."
+    },
+    {
+      "name": "sms.verification-code",
+      "type": "net.guerlab.sms.server.properties.VerificationCodeConfig",
+      "sourceType": "net.guerlab.sms.server.properties.VerificationCodeConfig",
+      "description": "短信验证码配置."
+    },
+    {
+      "name": "sms.verification-code.repository.memory",
+      "type": "net.guerlab.sms.server.properties.VerificationCodeMemoryRepositoryConfig",
+      "sourceType": "net.guerlab.sms.server.properties.VerificationCodeMemoryRepositoryConfig",
+      "description": "验证码内存储存配置."
+    },
+    {
+      "name": "sms.async",
+      "type": "net.guerlab.sms.server.properties.SmsAsyncConfig",
+      "sourceType": "net.guerlab.sms.server.properties.SmsAsyncConfig",
+      "description": "短信异步配置."
+    }
+  ],
+  "properties": [
+    {
+      "name": "sms.reg",
+      "type": "java.lang.String",
+      "sourceType": "net.guerlab.sms.server.properties.SmsConfig",
+      "description": "手机号码正则规则."
+    },
+    {
+      "name": "sms.load-balancer-type",
+      "type": "java.lang.String",
+      "sourceType": "net.guerlab.sms.server.properties.SmsConfig",
+      "description": "负载均衡类型.可选值：Random、RoundRobin、WeightRandom、WeightRoundRobin.",
+      "defaultValue": "Random"
+    },
+    {
+      "name": "sms.web.enable",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.properties.SmsWebConfig",
+      "description": "是否启用web端点.",
+      "defaultValue": "false"
+    },
+    {
+      "name": "sms.web.base-path",
+      "type": "java.lang.String",
+      "sourceType": "net.guerlab.sms.server.properties.SmsWebConfig",
+      "description": "基础路径.",
+      "defaultValue": "/sms"
+    },
+    {
+      "name": "sms.web.enable-send",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.properties.SmsWebConfig",
+      "description": "是否启用验证码发送web端点.",
+      "defaultValue": "true"
+    },
+    {
+      "name": "sms.web.enable-get",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.properties.SmsWebConfig",
+      "description": "是否启用验证码查询web端点.",
+      "defaultValue": "true"
+    },
+    {
+      "name": "sms.web.enable-verify",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.properties.SmsWebConfig",
+      "description": "是否启用验证码验证web端点.",
+      "defaultValue": "true"
+    },
+    {
+      "name": "sms.web.enable-notice",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.properties.SmsWebConfig",
+      "description": "是否启用通知发送web端点.",
+      "defaultValue": "true"
+    },
+    {
+      "name": "sms.verification-code.type",
+      "type": "java.lang.String",
+      "sourceType": "net.guerlab.sms.server.properties.VerificationCodeConfig",
+      "description": "验证码业务所使用的类型.",
+      "defaultValue": "VerificationCode"
+    },
+    {
+      "name": "sms.verification-code.expiration-time",
+      "type": "java.lang.Long",
+      "sourceType": "net.guerlab.sms.server.properties.VerificationCodeConfig",
+      "description": "验证码过期时间,小于等于0表示不过期，单位秒."
+    },
+    {
+      "name": "sms.verification-code.retry-interval-time",
+      "type": "java.lang.Long",
+      "sourceType": "net.guerlab.sms.server.properties.VerificationCodeConfig",
+      "description": "重新发送验证码间隔时间,小于等于0表示不启用，单位秒."
+    },
+    {
+      "name": "sms.verification-code.use-identification-code",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.properties.VerificationCodeConfig",
+      "description": "是否使用识别码.",
+      "defaultValue": "false"
+    },
+    {
+      "name": "sms.verification-code.code-length",
+      "type": "java.lang.Integer",
+      "sourceType": "net.guerlab.sms.server.properties.VerificationCodeConfig",
+      "description": "验证码长度.",
+      "defaultValue": "6"
+    },
+    {
+      "name": "sms.verification-code.identification-code-length",
+      "type": "java.lang.Integer",
+      "sourceType": "net.guerlab.sms.server.properties.VerificationCodeConfig",
+      "description": "识别码长度.",
+      "defaultValue": "3"
+    },
+    {
+      "name": "sms.verification-code.delete-by-verify-succeed",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.properties.VerificationCodeConfig",
+      "description": "验证成功是否删除验证码.",
+      "defaultValue": "true"
+    },
+    {
+      "name": "sms.verification-code.delete-by-verify-fail",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.properties.VerificationCodeConfig",
+      "description": "验证失败是否删除验证码.",
+      "defaultValue": "false"
+    },
+    {
+      "name": "sms.verification-code.template-has-expiration-time",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.properties.VerificationCodeConfig",
+      "description": "模板中是否包含过期时间.",
+      "defaultValue": "false"
+    },
+    {
+      "name": "sms.verification-code.repository.memory.gc-frequency",
+      "type": "java.lang.Long",
+      "sourceType": "net.guerlab.sms.server.properties.VerificationCodeMemoryRepositoryConfig",
+      "description": "gc频率，单位秒.",
+      "defaultValue": "300"
+    },
+    {
+      "name": "sms.async.enable",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.properties.SmsAsyncConfig",
+      "description": "是否启用异步支持.",
+      "defaultValue": "true"
+    },
+    {
+      "name": "sms.async.core-pool-size",
+      "type": "java.lang.Integer",
+      "sourceType": "net.guerlab.sms.server.properties.SmsAsyncConfig",
+      "description": "核心线程数量.",
+      "defaultValue": "可用处理器数量 (Runtime.getRuntime().availableProcessors())"
+    },
+    {
+      "name": "sms.async.maximum-pool-size",
+      "type": "java.lang.Integer",
+      "sourceType": "net.guerlab.sms.server.properties.SmsAsyncConfig",
+      "description": "最大线程数量.",
+      "defaultValue": "可用处理器数量 * 2 (Runtime.getRuntime().availableProcessors() * 2)"
+    },
+    {
+      "name": "sms.async.keep-alive-time",
+      "type": "java.lang.Long",
+      "sourceType": "net.guerlab.sms.server.properties.SmsAsyncConfig",
+      "description": "线程最大空闲时间.",
+      "defaultValue": "60"
+    },
+    {
+      "name": "sms.async.unit",
+      "type": "java.util.concurrent.TimeUnit",
+      "sourceType": "net.guerlab.sms.server.properties.SmsAsyncConfig",
+      "description": "线程最大空闲时间单位.",
+      "defaultValue": "SECONDS"
+    },
+    {
+      "name": "sms.async.queue-capacity",
+      "type": "java.lang.Integer",
+      "sourceType": "net.guerlab.sms.server.properties.SmsAsyncConfig",
+      "description": "队列容量.",
+      "defaultValue": "Integer.MAX_VALUE"
+    },
+    {
+      "name": "sms.async.reject-policy",
+      "type": "net.guerlab.sms.server.properties.RejectPolicy",
+      "sourceType": "net.guerlab.sms.server.properties.SmsAsyncConfig",
+      "description": "拒绝策略, 可选值:Abort、Caller、Discard、DiscardOldest.",
+      "defaultValue": "Abort"
+    }
+  ]
+}
