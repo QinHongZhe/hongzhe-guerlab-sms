@@ -13,8 +13,9 @@
 package net.guerlab.sms.aliyun;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.guerlab.sms.server.autoconfigure.SmsConfiguration;
 import net.guerlab.sms.server.loadbalancer.RandomSmsLoadBalancer;
+import net.guerlab.sms.server.spring.autoconfigure.SmsAutoConfiguration;
+import net.guerlab.sms.server.spring.autoconfigure.VerificationCodeAutoConfiguration;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,7 +35,8 @@ public class AliyunAutoConfigureTest {
         context = new AnnotationConfigApplicationContext();
         context.registerBean("objectMapper", ObjectMapper.class);
         context.registerBean("smsSenderLoadbalancer", RandomSmsLoadBalancer.class);
-        context.register(SmsConfiguration.class);
+        context.register(SmsAutoConfiguration.class);
+        context.register(VerificationCodeAutoConfiguration.class);
     }
 
     @After

@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-net.guerlab.sms.server.repository.VerificationCodeRedisRepository
+net.guerlab.sms.server.spring.redis.autoconfigure.VerificationCodeRedisRepositoryAutoConfiguration

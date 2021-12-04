@@ -46,7 +46,7 @@
     </issueManagement>
 
     <properties>
-        <revision>1.12.0</revision>
+        <revision>2.0.0</revision>
         <java.version>1.8</java.version>
         <project.encoding>UTF-8</project.encoding>
 
@@ -56,7 +56,7 @@
         <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 
-        <spring-boot.version>2.1.0.RELEASE</spring-boot.version>
+        <spring-boot.version>2.3.0.RELEASE</spring-boot.version>
 
         <guerlab-loadbalancer.version>0.0.3</guerlab-loadbalancer.version>
 
@@ -189,7 +189,17 @@
             </dependency>
             <dependency>
                 <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-server</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
                 <artifactId>guerlab-sms-server-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.guerlab.sms</groupId>
+                <artifactId>guerlab-sms-server-webmvc-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -348,6 +358,7 @@
 
     <modules>
         <module>guerlab-sms-core</module>
+        <module>guerlab-sms-server</module>
         <module>guerlab-sms-server-starter</module>
         <module>guerlab-sms-redis-repository-starter</module>
 
@@ -386,5 +397,6 @@
 
         <module>guerlab-sms-yunpian</module>
         <module>guerlab-sms-yunpian-starter</module>
+        <module>guerlab-sms-server-webmvc-starter</module>
     </modules>
 </project>

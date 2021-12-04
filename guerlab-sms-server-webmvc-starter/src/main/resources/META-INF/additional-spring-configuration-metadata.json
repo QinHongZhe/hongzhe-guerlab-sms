@@ -1,0 +1,54 @@
+{
+  "groups": [
+    {
+      "name": "sms.web",
+      "type": "net.guerlab.sms.server.spring.webmvc.properties.SmsWebmvcProperties",
+      "sourceType": "net.guerlab.sms.server.spring.webmvc.properties.SmsWebmvcProperties",
+      "description": "短信Web配置."
+    }
+  ],
+  "properties": [
+    {
+      "name": "sms.web.enable",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.spring.webmvc.properties.SmsWebmvcProperties",
+      "description": "是否启用web端点.",
+      "defaultValue": "false"
+    },
+    {
+      "name": "sms.web.base-path",
+      "type": "java.lang.String",
+      "sourceType": "net.guerlab.sms.server.spring.webmvc.properties.SmsWebmvcProperties",
+      "description": "基础路径.",
+      "defaultValue": "/sms"
+    },
+    {
+      "name": "sms.web.enable-send",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.spring.webmvc.properties.SmsWebmvcProperties",
+      "description": "是否启用验证码发送web端点.",
+      "defaultValue": "true"
+    },
+    {
+      "name": "sms.web.enable-get",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.spring.webmvc.properties.SmsWebmvcProperties",
+      "description": "是否启用验证码查询web端点.",
+      "defaultValue": "true"
+    },
+    {
+      "name": "sms.web.enable-verify",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.spring.webmvc.properties.SmsWebmvcProperties",
+      "description": "是否启用验证码验证web端点.",
+      "defaultValue": "true"
+    },
+    {
+      "name": "sms.web.enable-notice",
+      "type": "java.lang.Boolean",
+      "sourceType": "net.guerlab.sms.server.spring.webmvc.properties.SmsWebmvcProperties",
+      "description": "是否启用通知发送web端点.",
+      "defaultValue": "true"
+    }
+  ]
+}

@@ -13,8 +13,8 @@
 package net.guerlab.sms.yunpian;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.guerlab.sms.server.autoconfigure.SmsConfiguration;
 import net.guerlab.sms.server.loadbalancer.RandomSmsLoadBalancer;
+import net.guerlab.sms.server.spring.autoconfigure.SmsAutoConfiguration;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,7 +34,7 @@ public class YunPianAutoConfigureTest {
         context = new AnnotationConfigApplicationContext();
         context.registerBean("objectMapper", ObjectMapper.class);
         context.registerBean("smsSenderLoadbalancer", RandomSmsLoadBalancer.class);
-        context.register(SmsConfiguration.class);
+        context.register(SmsAutoConfiguration.class);
         TestPropertyValues.of("sms.yunpian.apikey=apikey").applyTo(context);
         TestPropertyValues.of("sms.yunpian.templates.test=templateId").applyTo(context);
     }
