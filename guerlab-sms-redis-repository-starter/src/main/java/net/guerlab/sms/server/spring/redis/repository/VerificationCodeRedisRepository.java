@@ -18,7 +18,7 @@ import net.guerlab.sms.core.utils.StringUtils;
 import net.guerlab.sms.server.entity.VerificationCode;
 import net.guerlab.sms.server.repository.VerificationCodeRepository;
 import net.guerlab.sms.server.spring.redis.properties.RedisProperties;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.lang.Nullable;
 
@@ -36,11 +36,11 @@ public class VerificationCodeRedisRepository implements VerificationCodeReposito
 
     private final RedisProperties properties;
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final StringRedisTemplate redisTemplate;
 
     private final ObjectMapper objectMapper;
 
-    public VerificationCodeRedisRepository(RedisProperties properties, RedisTemplate<String, String> redisTemplate,
+    public VerificationCodeRedisRepository(RedisProperties properties, StringRedisTemplate redisTemplate,
             ObjectMapper objectMapper) {
         this.properties = properties;
         this.redisTemplate = redisTemplate;

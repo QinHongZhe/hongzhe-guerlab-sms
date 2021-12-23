@@ -13,30 +13,41 @@
 package net.guerlab.sms.server.spring.redis.autoconfigure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.server.repository.VerificationCodeRepository;
 import net.guerlab.sms.server.spring.autoconfigure.SmsAutoConfiguration;
+import net.guerlab.sms.server.spring.autoconfigure.VerificationCodeAutoConfiguration;
 import net.guerlab.sms.server.spring.redis.properties.RedisProperties;
 import net.guerlab.sms.server.spring.redis.repository.VerificationCodeRedisRepository;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
  * 验证码redis储存实现自动配置
  *
  * @author guer
  */
+@Slf4j
 @Configuration
 @AutoConfigureAfter(SmsAutoConfiguration.class)
+@AutoConfigureBefore(VerificationCodeAutoConfiguration.class)
 @EnableConfigurationProperties(RedisProperties.class)
 public class VerificationCodeRedisRepositoryAutoConfiguration {
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
+    @ConditionalOnMissingBean(VerificationCodeRepository.class)
+    @ConditionalOnBean(StringRedisTemplate.class)
     public VerificationCodeRepository verificationCodeRedisRepository(RedisProperties properties,
-            RedisTemplate<String, String> redisTemplate, ObjectMapper objectMapper) {
-        return new VerificationCodeRedisRepository(properties, redisTemplate, objectMapper);
+            StringRedisTemplate redisTemplate, ObjectMapper objectMapper) {
+        VerificationCodeRepository repository = new VerificationCodeRedisRepository(properties, redisTemplate,
+                objectMapper);
+        log.debug("create VerificationCodeRepository: Redis");
+        return repository;
     }
 }

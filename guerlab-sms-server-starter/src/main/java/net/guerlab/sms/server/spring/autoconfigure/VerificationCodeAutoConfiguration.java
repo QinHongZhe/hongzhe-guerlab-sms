@@ -12,6 +12,7 @@
  */
 package net.guerlab.sms.server.spring.autoconfigure;
 
+import lombok.extern.slf4j.Slf4j;
 import net.guerlab.sms.server.properties.VerificationCodeConfig;
 import net.guerlab.sms.server.repository.VerificationCodeMemoryRepository;
 import net.guerlab.sms.server.repository.VerificationCodeRepository;
@@ -30,6 +31,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author guer
  */
+@Slf4j
 @Configuration
 @AutoConfigureAfter(SmsAutoConfiguration.class)
 @EnableConfigurationProperties({ VerificationCodeProperties.class, VerificationCodeMemoryRepositoryProperties.class })
@@ -84,6 +86,8 @@ public class VerificationCodeAutoConfiguration {
     @ConditionalOnMissingBean(VerificationCodeRepository.class)
     public VerificationCodeRepository verificationCodeMemoryRepository(
             VerificationCodeMemoryRepositoryProperties config) {
-        return new VerificationCodeMemoryRepository(config);
+        VerificationCodeRepository repository = new VerificationCodeMemoryRepository(config);
+        log.debug("create VerificationCodeRepository: Memory");
+        return repository;
     }
 }
