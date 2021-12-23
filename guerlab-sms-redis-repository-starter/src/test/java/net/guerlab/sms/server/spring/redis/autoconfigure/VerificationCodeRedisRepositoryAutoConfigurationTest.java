@@ -55,4 +55,14 @@ public class VerificationCodeRedisRepositoryAutoConfigurationTest {
         Assert.assertFalse(
                 context.getBean(VerificationCodeRepository.class) instanceof VerificationCodeRedisRepository);
     }
+
+    @Test
+    public void size() {
+        context.register(RedisAutoConfiguration.class);
+        context.register(SmsAutoConfiguration.class);
+        context.register(VerificationCodeRedisRepositoryAutoConfiguration.class);
+        context.register(VerificationCodeAutoConfiguration.class);
+        context.refresh();
+        Assert.assertEquals(1, context.getBeansOfType(VerificationCodeRepository.class).size());
+    }
 }
