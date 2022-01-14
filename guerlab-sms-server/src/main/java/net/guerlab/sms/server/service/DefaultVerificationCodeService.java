@@ -159,7 +159,7 @@ public class DefaultVerificationCodeService implements VerificationCodeService {
         Long expirationTime = config.getExpirationTime();
         Map<String, String> params = new HashMap<>(4);
         params.put(MSG_KEY_CODE, verificationCode.getCode());
-        if (verificationCode.getIdentificationCode() != null) {
+        if (StringUtils.isNotBlank(verificationCode.getIdentificationCode())) {
             params.put(MSG_KEY_IDENTIFICATION_CODE, verificationCode.getIdentificationCode());
         }
         if (config.isTemplateHasExpirationTime() && expirationTime != null && expirationTime > 0) {
