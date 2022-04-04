@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,14 +10,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.server.spring.webmvc.autoconfigure;
 
 import lombok.extern.slf4j.Slf4j;
-import net.guerlab.sms.server.service.NoticeService;
-import net.guerlab.sms.server.service.VerificationCodeService;
-import net.guerlab.sms.server.spring.autoconfigure.SmsAutoConfiguration;
-import net.guerlab.sms.server.spring.webmvc.controller.SmsController;
-import net.guerlab.sms.server.spring.webmvc.properties.SmsWebmvcProperties;
+
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -25,8 +22,14 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import net.guerlab.sms.server.service.NoticeService;
+import net.guerlab.sms.server.service.VerificationCodeService;
+import net.guerlab.sms.server.spring.autoconfigure.SmsAutoConfiguration;
+import net.guerlab.sms.server.spring.webmvc.controller.SmsController;
+import net.guerlab.sms.server.spring.webmvc.properties.SmsWebmvcProperties;
+
 /**
- * 短信webmvc自动配置
+ * 短信webmvc自动配置.
  *
  * @author guer
  */
@@ -37,9 +40,9 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(prefix = SmsWebmvcProperties.PREFIX, name = "enable", havingValue = "true")
 public class SmsWebmvcConfiguration {
 
-    @Bean
-    @ConditionalOnMissingBean(SmsController.class)
-    public SmsController smsController(VerificationCodeService verificationCodeService, NoticeService noticeService) {
-        return new SmsController(verificationCodeService, noticeService);
-    }
+	@Bean
+	@ConditionalOnMissingBean(SmsController.class)
+	public SmsController smsController(VerificationCodeService verificationCodeService, NoticeService noticeService) {
+		return new SmsController(verificationCodeService, noticeService);
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,42 +10,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.guerlab.sms.server.entity;
 
-import lombok.Data;
+package net.guerlab.sms.server.entity;
 
 import java.time.LocalDateTime;
 
+import lombok.Data;
+
 /**
- * 验证码
+ * 验证码.
  *
  * @author guer
  */
 @Data
 public class VerificationCode {
 
-    /**
-     * 手机号
-     */
-    private String phone;
+	/**
+	 * 手机号.
+	 */
+	private String phone;
 
-    /**
-     * 验证码
-     */
-    private String code;
+	/**
+	 * 验证码.
+	 */
+	private String code;
 
-    /**
-     * 识别码
-     */
-    private String identificationCode;
+	/**
+	 * 识别码.
+	 */
+	private String identificationCode;
 
-    /**
-     * 可重试时间
-     */
-    private LocalDateTime retryTime;
+	/**
+	 * 可重试时间.
+	 */
+	private LocalDateTime retryTime;
 
-    /**
-     * 过期时间
-     */
-    private LocalDateTime expirationTime;
+	/**
+	 * 过期时间.
+	 */
+	private LocalDateTime expirationTime;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,18 +10,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.server.spring.webmvc.properties;
 
-import net.guerlab.sms.server.properties.SmsWebConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import net.guerlab.sms.server.properties.SmsWebConfig;
+
 /**
- * 短信Web配置
+ * 短信Web配置.
  *
  * @author guer
  */
 @ConfigurationProperties(prefix = SmsWebmvcProperties.PREFIX)
 public class SmsWebmvcProperties extends SmsWebConfig {
 
-    public static final String PREFIX = "sms.web";
+	/**
+	 * 配置前缀.
+	 */
+	public static final String PREFIX = "sms.web";
 }

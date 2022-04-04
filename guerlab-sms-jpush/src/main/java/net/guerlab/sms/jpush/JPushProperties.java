@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,15 +10,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.jpush;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import net.guerlab.sms.server.properties.AbstractHandlerProperties;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import net.guerlab.sms.server.properties.AbstractHandlerProperties;
+
 /**
- * 极光短信配置
+ * 极光短信配置.
  *
  * @author guer
  */
@@ -28,19 +31,19 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "sms.jpush")
 public class JPushProperties extends AbstractHandlerProperties<Integer> {
 
-    /**
-     * appKey
-     */
-    private String appKey;
+	/**
+	 * appKey.
+	 */
+	private String appKey;
 
-    /**
-     * masterSecret
-     */
-    private String masterSecret;
+	/**
+	 * masterSecret.
+	 */
+	private String masterSecret;
 
-    /**
-     * 签名ID
-     */
-    private Integer signId;
+	/**
+	 * 签名ID.
+	 */
+	private Integer signId;
 
 }

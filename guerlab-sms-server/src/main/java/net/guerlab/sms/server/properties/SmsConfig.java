@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,30 +10,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.server.properties;
 
 import lombok.Data;
 
 /**
- * 短信配置
+ * 短信配置.
  *
  * @author guer
  */
 @Data
 public class SmsConfig {
 
-    /**
-     * 手机号码正则规则
-     */
-    private String reg;
+	/**
+	 * 手机号码正则规则.
+	 */
+	private String reg;
 
-    /**
-     * 负载均衡类型
-     * <p>
-     * 可选值:
-     * Random、RoundRobin、WeightRandom、WeightRoundRobin，
-     * 默认:
-     * Random
-     */
-    private String loadBalancerType = "Random";
+	/**
+	 * 负载均衡类型.
+	 * <p>
+	 * 可选值:
+	 * Random、RoundRobin、WeightRandom、WeightRoundRobin，
+	 * 默认:
+	 * Random
+	 */
+	private String loadBalancerType = "Random";
 }

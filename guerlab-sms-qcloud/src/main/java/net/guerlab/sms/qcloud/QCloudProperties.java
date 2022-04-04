@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,15 +10,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.qcloud;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import net.guerlab.sms.server.properties.AbstractHandlerProperties;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import net.guerlab.sms.server.properties.AbstractHandlerProperties;
+
 /**
- * 腾讯云短信配置
+ * 腾讯云短信配置.
  *
  * @author guer
  */
@@ -28,19 +31,19 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "sms.qcloud")
 public class QCloudProperties extends AbstractHandlerProperties<Integer> {
 
-    /**
-     * 短信应用SDK AppID
-     */
-    private int appId;
+	/**
+	 * 短信应用SDK AppID.
+	 */
+	private int appId;
 
-    /**
-     * 短信应用SDK AppKey
-     */
-    private String appkey;
+	/**
+	 * 短信应用SDK AppKey.
+	 */
+	private String appkey;
 
-    /**
-     * 短信签名
-     */
-    private String smsSign;
+	/**
+	 * 短信签名.
+	 */
+	private String smsSign;
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,14 +10,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.server.handler;
 
-import net.guerlab.sms.server.entity.SmsSendFailEvent;
 import org.springframework.context.ApplicationListener;
 
+import net.guerlab.sms.server.entity.SmsSendFailEvent;
+
 /**
- * 发送失败事件监听接口
+ * 发送失败事件监听接口.
  *
  * @author guer
  */
-public interface SmsSendFailEventListener extends ApplicationListener<SmsSendFailEvent> {}
+public interface SmsSendFailEventListener extends ApplicationListener<SmsSendFailEvent> { }

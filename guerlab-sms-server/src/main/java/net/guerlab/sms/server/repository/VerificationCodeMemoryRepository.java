@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,13 +10,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.guerlab.sms.server.repository;
 
-import lombok.extern.slf4j.Slf4j;
-import net.guerlab.sms.core.utils.StringUtils;
-import net.guerlab.sms.server.entity.VerificationCode;
-import net.guerlab.sms.server.properties.VerificationCodeMemoryRepositoryConfig;
-import org.springframework.lang.Nullable;
+package net.guerlab.sms.server.repository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,107 +22,115 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.lang.Nullable;
+
+import net.guerlab.sms.core.utils.StringUtils;
+import net.guerlab.sms.server.entity.VerificationCode;
+import net.guerlab.sms.server.properties.VerificationCodeMemoryRepositoryConfig;
+
 /**
- * 验证码内存储存实现
+ * 验证码内存储存实现.
  *
  * @author guer
  */
 @Slf4j
 public class VerificationCodeMemoryRepository implements VerificationCodeRepository {
 
-    private final Map<String, VerificationCode> cache = new ConcurrentHashMap<>();
+	private final Map<String, VerificationCode> cache = new ConcurrentHashMap<>();
 
-    private final ScheduledThreadPoolExecutor gcScheduledExecutor = new ScheduledThreadPoolExecutor(1, r -> {
-        Thread thread = new Thread(r);
-        thread.setName("VerificationCodeMemoryRepository-GC");
-        return thread;
-    });
+	private final ScheduledThreadPoolExecutor gcScheduledExecutor = new ScheduledThreadPoolExecutor(1, r -> {
+		Thread thread = new Thread(r);
+		thread.setName("VerificationCodeMemoryRepository-GC");
+		return thread;
+	});
 
-    private final Runnable task = this::gcHandler;
+	private final Runnable task = this::gcHandler;
 
-    private VerificationCodeMemoryRepositoryConfig config;
+	private VerificationCodeMemoryRepositoryConfig config;
 
-    public VerificationCodeMemoryRepository(VerificationCodeMemoryRepositoryConfig config) {
-        setConfig(config);
-    }
+	public VerificationCodeMemoryRepository(VerificationCodeMemoryRepositoryConfig config) {
+		setConfig(config);
+	}
 
-    @Override
-    public VerificationCode findOne(String phone, @Nullable String identificationCode) {
-        String key = key(phone, identificationCode);
-        VerificationCode verificationCode = cache.get(key);
+	@Override
+	public VerificationCode findOne(String phone, @Nullable String identificationCode) {
+		String key = key(phone, identificationCode);
+		VerificationCode verificationCode = cache.get(key);
 
-        if (verificationCode == null) {
-            log.debug("verificationCode is null, key: {}", key);
-            return null;
-        }
+		if (verificationCode == null) {
+			log.debug("verificationCode is null, key: {}", key);
+			return null;
+		}
 
-        LocalDateTime expirationTime = verificationCode.getExpirationTime();
-        if (expirationTime != null && expirationTime.isBefore(LocalDateTime.now())) {
-            log.debug("verificationCode is not null, but timeout, key: {}", key);
-            cache.remove(key);
-            return null;
-        }
+		LocalDateTime expirationTime = verificationCode.getExpirationTime();
+		if (expirationTime != null && expirationTime.isBefore(LocalDateTime.now())) {
+			log.debug("verificationCode is not null, but timeout, key: {}", key);
+			cache.remove(key);
+			return null;
+		}
 
-        return verificationCode;
-    }
+		return verificationCode;
+	}
 
-    @Override
-    public void save(VerificationCode verificationCode) {
-        String key = key(verificationCode.getPhone(), verificationCode.getIdentificationCode());
+	@Override
+	public void save(VerificationCode verificationCode) {
+		String key = key(verificationCode.getPhone(), verificationCode.getIdentificationCode());
 
-        cache.put(key, verificationCode);
-    }
+		cache.put(key, verificationCode);
+	}
 
-    @Override
-    public void delete(String phone, @Nullable String identificationCode) {
-        cache.remove(key(phone, identificationCode));
-    }
+	@Override
+	public void delete(String phone, @Nullable String identificationCode) {
+		cache.remove(key(phone, identificationCode));
+	}
 
-    public void setConfig(VerificationCodeMemoryRepositoryConfig config) {
-        this.config = config;
-        initGcThread();
-    }
+	public void setConfig(VerificationCodeMemoryRepositoryConfig config) {
+		this.config = config;
+		initGcThread();
+	}
 
-    private String key(String phone, @Nullable String identificationCode) {
-        if (StringUtils.isBlank(identificationCode)) {
-            return phone;
-        }
+	private String key(String phone, @Nullable String identificationCode) {
+		if (StringUtils.isBlank(identificationCode)) {
+			return phone;
+		}
 
-        return phone + "_" + identificationCode;
-    }
+		return phone + "_" + identificationCode;
+	}
 
-    private void initGcThread() {
-        long gcFrequency = config.getGcFrequency();
-        if (gcFrequency <= 0) {
-            gcFrequency = VerificationCodeMemoryRepositoryConfig.DEFAULT_GC_FREQUENCY;
-        }
+	private void initGcThread() {
+		long gcFrequency = config.getGcFrequency();
+		if (gcFrequency <= 0) {
+			gcFrequency = VerificationCodeMemoryRepositoryConfig.DEFAULT_GC_FREQUENCY;
+		}
 
-        gcScheduledExecutor.remove(task);
-        gcScheduledExecutor.scheduleAtFixedRate(task, gcFrequency, gcFrequency, TimeUnit.SECONDS);
-    }
+		gcScheduledExecutor.remove(task);
+		gcScheduledExecutor.scheduleAtFixedRate(task, gcFrequency, gcFrequency, TimeUnit.SECONDS);
+	}
 
-    private void gcHandler() {
-        LocalDateTime now = LocalDateTime.now();
+	private void gcHandler() {
+		LocalDateTime now = LocalDateTime.now();
 
-        boolean debug = log.isDebugEnabled();
-        Set<String> keys = cache.keySet();
-        List<String> removeKeys = debug ? new ArrayList<>(keys.size()) : null;
+		boolean debug = log.isDebugEnabled();
+		Set<String> keys = cache.keySet();
+		List<String> removeKeys = debug ? new ArrayList<>(keys.size()) : null;
 
-        keys.forEach(key -> {
-            VerificationCode verificationCode = cache.get(key);
-            if (verificationCode != null) {
-                LocalDateTime expirationTime = verificationCode.getExpirationTime();
-                if (expirationTime != null && expirationTime.isBefore(now)) {
-                    cache.remove(key);
-                    if (debug) {
-                        removeKeys.add(key);
-                    }
-                }
-            }
-        });
+		keys.forEach(key -> {
+			VerificationCode verificationCode = cache.get(key);
+			if (verificationCode != null) {
+				LocalDateTime expirationTime = verificationCode.getExpirationTime();
+				if (expirationTime != null && expirationTime.isBefore(now)) {
+					cache.remove(key);
+					if (debug) {
+						removeKeys.add(key);
+					}
+				}
+			}
+		});
 
-        if (debug) {
-            log.debug("gc remove keys: {}", removeKeys.size());
-        }
-    }
+		if (debug) {
+			log.debug("gc remove keys: {}", removeKeys.size());
+		}
+	}
 }

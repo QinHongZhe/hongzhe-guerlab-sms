@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,15 +10,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.baiducloud;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import net.guerlab.sms.server.properties.AbstractHandlerProperties;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import net.guerlab.sms.server.properties.AbstractHandlerProperties;
+
 /**
- * 百度云短信配置
+ * 百度云短信配置.
  *
  * @author guer
  */
@@ -27,23 +30,23 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "sms.baiducloud")
 public class BaiduCloudProperties extends AbstractHandlerProperties<String> {
 
-    /**
-     * ACCESS_KEY_ID
-     */
-    private String accessKeyId;
+	/**
+	 * ACCESS_KEY_ID.
+	 */
+	private String accessKeyId;
 
-    /**
-     * SECRET_ACCESS_KEY
-     */
-    private String secretAccessKey;
+	/**
+	 * SECRET_ACCESS_KEY.
+	 */
+	private String secretAccessKey;
 
-    /**
-     * endpoint
-     */
-    private String endpoint;
+	/**
+	 * endpoint.
+	 */
+	private String endpoint;
 
-    /**
-     * 短信签名ID
-     */
-    private String signatureId;
+	/**
+	 * 短信签名ID.
+	 */
+	private String signatureId;
 }

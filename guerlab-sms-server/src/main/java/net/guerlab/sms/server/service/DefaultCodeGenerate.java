@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,36 +10,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.guerlab.sms.server.service;
 
-import net.guerlab.sms.server.properties.VerificationCodeConfig;
+package net.guerlab.sms.server.service;
 
 import java.text.NumberFormat;
 import java.util.concurrent.ThreadLocalRandom;
 
+import net.guerlab.sms.server.properties.VerificationCodeConfig;
+
 /**
- * 默认验证码生成
+ * 默认验证码生成.
  *
  * @author guer
  */
 public class DefaultCodeGenerate implements CodeGenerate {
 
-    private final VerificationCodeConfig config;
+	private final VerificationCodeConfig config;
 
-    public DefaultCodeGenerate(VerificationCodeConfig config) {
-        this.config = config;
-    }
+	public DefaultCodeGenerate(VerificationCodeConfig config) {
+		this.config = config;
+	}
 
-    @Override
-    public String generate() {
-        int codeLength = config.getCodeLength();
+	@Override
+	public String generate() {
+		int codeLength = config.getCodeLength();
 
-        NumberFormat format = NumberFormat.getInstance();
-        format.setGroupingUsed(false);
-        format.setMaximumIntegerDigits(codeLength);
-        format.setMinimumIntegerDigits(codeLength);
+		NumberFormat format = NumberFormat.getInstance();
+		format.setGroupingUsed(false);
+		format.setMaximumIntegerDigits(codeLength);
+		format.setMinimumIntegerDigits(codeLength);
 
-        return format.format(ThreadLocalRandom.current().nextInt((int) Math.pow(10, codeLength)));
-    }
+		return format.format(ThreadLocalRandom.current().nextInt((int) Math.pow(10, codeLength)));
+	}
 
 }

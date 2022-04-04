@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,15 +10,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.server.spring.redis.autoconfigure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import net.guerlab.sms.server.repository.VerificationCodeRepository;
-import net.guerlab.sms.server.spring.autoconfigure.SmsAutoConfiguration;
-import net.guerlab.sms.server.spring.autoconfigure.VerificationCodeAutoConfiguration;
-import net.guerlab.sms.server.spring.redis.properties.RedisProperties;
-import net.guerlab.sms.server.spring.redis.repository.VerificationCodeRedisRepository;
+
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -28,8 +25,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import net.guerlab.sms.server.repository.VerificationCodeRepository;
+import net.guerlab.sms.server.spring.autoconfigure.SmsAutoConfiguration;
+import net.guerlab.sms.server.spring.autoconfigure.VerificationCodeAutoConfiguration;
+import net.guerlab.sms.server.spring.redis.properties.RedisProperties;
+import net.guerlab.sms.server.spring.redis.repository.VerificationCodeRedisRepository;
+
 /**
- * 验证码redis储存实现自动配置
+ * 验证码redis储存实现自动配置.
  *
  * @author guer
  */
@@ -40,14 +43,14 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 @EnableConfigurationProperties(RedisProperties.class)
 public class VerificationCodeRedisRepositoryAutoConfiguration {
 
-    @Bean
-    @ConditionalOnMissingBean(VerificationCodeRepository.class)
-    @ConditionalOnBean(StringRedisTemplate.class)
-    public VerificationCodeRepository verificationCodeRedisRepository(RedisProperties properties,
-            StringRedisTemplate redisTemplate, ObjectMapper objectMapper) {
-        VerificationCodeRepository repository = new VerificationCodeRedisRepository(properties, redisTemplate,
-                objectMapper);
-        log.debug("create VerificationCodeRepository: Redis");
-        return repository;
-    }
+	@Bean
+	@ConditionalOnMissingBean(VerificationCodeRepository.class)
+	@ConditionalOnBean(StringRedisTemplate.class)
+	public VerificationCodeRepository verificationCodeRedisRepository(RedisProperties properties,
+			StringRedisTemplate redisTemplate, ObjectMapper objectMapper) {
+		VerificationCodeRepository repository = new VerificationCodeRedisRepository(properties, redisTemplate,
+				objectMapper);
+		log.debug("create VerificationCodeRepository: Redis");
+		return repository;
+	}
 }
