@@ -1,305 +1,327 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>net.guerlab.sms</groupId>
-    <artifactId>guerlab-sms</artifactId>
-    <version>${revision}</version>
-    <packaging>pom</packaging>
+<!--
+  ~ Copyright 2018-2022 guerlab.net and other contributors.
+  ~
+  ~ Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      https://www.gnu.org/licenses/lgpl-3.0.html
+  ~
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
-    <parent>
-        <groupId>net.guerlab.builder</groupId>
-        <artifactId>guerlab-builder</artifactId>
-        <version>1.2.0</version>
-    </parent>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.guerlab.sms</groupId>
+	<artifactId>guerlab-sms</artifactId>
+	<version>${revision}</version>
+	<packaging>pom</packaging>
 
-    <name>${project.groupId}:${project.artifactId}</name>
-    <description>guerlab sms extension</description>
-    <url>https://gitee.com/guerlab_net/guerlab-sms</url>
+	<parent>
+		<groupId>net.guerlab.builder</groupId>
+		<artifactId>guerlab-builder</artifactId>
+		<version>1.2.0</version>
+	</parent>
 
-    <licenses>
-        <license>
-            <name>GNU LESSER GENERAL PUBLIC LICENSE Version 3</name>
-            <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
-        </license>
-    </licenses>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>guerlab sms extension</description>
+	<url>https://gitee.com/guerlab_net/guerlab-sms</url>
 
-    <developers>
-        <developer>
-            <id>guer</id>
-            <name>guer</name>
-            <email>master@guerlab.net</email>
-            <organization>guerlab</organization>
-            <organizationUrl>https://www.guerlab.net</organizationUrl>
-        </developer>
-    </developers>
+	<licenses>
+		<license>
+			<name>GNU LESSER GENERAL PUBLIC LICENSE Version 3</name>
+			<url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
+		</license>
+	</licenses>
 
-    <organization>
-        <name>guerlab</name>
-        <url>https://www.guerlab.net</url>
-    </organization>
+	<developers>
+		<developer>
+			<id>guer</id>
+			<name>guer</name>
+			<email>master@guerlab.net</email>
+			<organization>guerlab</organization>
+			<organizationUrl>https://www.guerlab.net</organizationUrl>
+		</developer>
+	</developers>
 
-    <scm>
-        <connection>scm:git:https://gitee.com/guerlab_net/guerlab-sms.git</connection>
-        <developerConnection>scm:git:https://gitee.com/guerlab_net/guerlab-sms.git</developerConnection>
-        <url>https://gitee.com/guerlab_net/guerlab-sms</url>
-        <tag>HEAD</tag>
-    </scm>
+	<organization>
+		<name>guerlab</name>
+		<url>https://www.guerlab.net</url>
+	</organization>
 
-    <issueManagement>
-        <system>Gitee</system>
-        <url>https://gitee.com/guerlab_net/guerlab-sms/issues</url>
-    </issueManagement>
+	<scm>
+		<connection>scm:git:https://gitee.com/guerlab_net/guerlab-sms.git</connection>
+		<developerConnection>scm:git:https://gitee.com/guerlab_net/guerlab-sms.git</developerConnection>
+		<url>https://gitee.com/guerlab_net/guerlab-sms</url>
+		<tag>HEAD</tag>
+	</scm>
 
-    <properties>
-        <revision>2.1.0-SNAPSHOT</revision>
-        <java.version>1.8</java.version>
-        <project.encoding>UTF-8</project.encoding>
+	<issueManagement>
+		<system>Gitee</system>
+		<url>https://gitee.com/guerlab_net/guerlab-sms/issues</url>
+	</issueManagement>
 
-        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
-        <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
-        <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
-        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+	<properties>
+		<revision>2.1.0-SNAPSHOT</revision>
+		<java.version>1.8</java.version>
+		<project.encoding>UTF-8</project.encoding>
 
-        <spring-boot.version>2.3.0.RELEASE</spring-boot.version>
+		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+		<maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
+		<maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
+		<maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
+		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 
-        <guerlab-loadbalancer.version>1.0.0</guerlab-loadbalancer.version>
+		<spring-boot.version>2.3.0.RELEASE</spring-boot.version>
 
-        <apache-httpclient.version>4.5.13</apache-httpclient.version>
-    </properties>
+		<guerlab-loadbalancer.version>1.0.0</guerlab-loadbalancer.version>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
-                <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+		<apache-httpclient.version>4.5.13</apache-httpclient.version>
+	</properties>
 
-            <dependency>
-                <groupId>net.guerlab.loadbalancer</groupId>
-                <artifactId>guerlab-loadbalancer</artifactId>
-                <version>${guerlab-loadbalancer.version}</version>
-            </dependency>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-parent</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-core</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-server</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-server-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-server-webmvc-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-redis-repository-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
+			<dependency>
+				<groupId>net.guerlab.loadbalancer</groupId>
+				<artifactId>guerlab-loadbalancer</artifactId>
+				<version>${guerlab-loadbalancer.version}</version>
+			</dependency>
 
-            <!-- handler -->
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-aliyun</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-aliyun-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-core</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-server</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-server-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-server-webmvc-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-redis-repository-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
 
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-baiducloud</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-baiducloud-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
+			<!-- handler -->
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-aliyun</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-aliyun-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
 
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-chinamobile</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-chinamobile-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-baiducloud</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-baiducloud-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
 
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-huaweicloud</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-huaweicloud-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-chinamobile</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-chinamobile-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
 
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-jdcloud</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-jdcloud-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-huaweicloud</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-huaweicloud-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
 
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-jpush</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-jpush-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-jdcloud</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-jdcloud-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
 
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-netease</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-netease-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-jpush</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-jpush-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
 
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-qcloud</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-qcloud-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-netease</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-netease-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
 
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-qcloud-v3</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-qcloud-v3-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-qcloud</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-qcloud-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
 
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-qiniu</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-qiniu-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-qcloud-v3</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-qcloud-v3-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
 
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-upyun</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-upyun-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-qiniu</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-qiniu-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
 
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-yunpian</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.guerlab.sms</groupId>
-                <artifactId>guerlab-sms-yunpian-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-upyun</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-upyun-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
 
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>${apache-httpclient.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-yunpian</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-yunpian-starter</artifactId>
+				<version>${revision}</version>
+			</dependency>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-    </dependencies>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>${apache-httpclient.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
-    <modules>
-        <module>guerlab-sms-core</module>
-        <module>guerlab-sms-server</module>
-        <module>guerlab-sms-server-starter</module>
-        <module>guerlab-sms-redis-repository-starter</module>
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+	</dependencies>
 
-        <module>guerlab-sms-aliyun</module>
-        <module>guerlab-sms-aliyun-starter</module>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 
-        <module>guerlab-sms-baiducloud</module>
-        <module>guerlab-sms-baiducloud-starter</module>
+	<modules>
+		<module>guerlab-sms-core</module>
+		<module>guerlab-sms-server</module>
+		<module>guerlab-sms-server-starter</module>
+		<module>guerlab-sms-redis-repository-starter</module>
 
-        <module>guerlab-sms-chinamobile</module>
-        <module>guerlab-sms-chinamobile-starter</module>
+		<module>guerlab-sms-aliyun</module>
+		<module>guerlab-sms-aliyun-starter</module>
 
-        <module>guerlab-sms-huaweicloud</module>
-        <module>guerlab-sms-huaweicloud-starter</module>
+		<module>guerlab-sms-baiducloud</module>
+		<module>guerlab-sms-baiducloud-starter</module>
 
-        <module>guerlab-sms-jdcloud</module>
-        <module>guerlab-sms-jdcloud-starter</module>
+		<module>guerlab-sms-chinamobile</module>
+		<module>guerlab-sms-chinamobile-starter</module>
 
-        <module>guerlab-sms-jpush</module>
-        <module>guerlab-sms-jpush-starter</module>
+		<module>guerlab-sms-huaweicloud</module>
+		<module>guerlab-sms-huaweicloud-starter</module>
 
-        <module>guerlab-sms-netease</module>
-        <module>guerlab-sms-netease-starter</module>
+		<module>guerlab-sms-jdcloud</module>
+		<module>guerlab-sms-jdcloud-starter</module>
 
-        <module>guerlab-sms-qcloud</module>
-        <module>guerlab-sms-qcloud-starter</module>
+		<module>guerlab-sms-jpush</module>
+		<module>guerlab-sms-jpush-starter</module>
 
-        <module>guerlab-sms-qcloud-v3</module>
-        <module>guerlab-sms-qcloud-v3-starter</module>
+		<module>guerlab-sms-netease</module>
+		<module>guerlab-sms-netease-starter</module>
 
-        <module>guerlab-sms-qiniu</module>
-        <module>guerlab-sms-qiniu-starter</module>
+		<module>guerlab-sms-qcloud</module>
+		<module>guerlab-sms-qcloud-starter</module>
 
-        <module>guerlab-sms-upyun</module>
-        <module>guerlab-sms-upyun-starter</module>
+		<module>guerlab-sms-qcloud-v3</module>
+		<module>guerlab-sms-qcloud-v3-starter</module>
 
-        <module>guerlab-sms-yunpian</module>
-        <module>guerlab-sms-yunpian-starter</module>
-        <module>guerlab-sms-server-webmvc-starter</module>
-    </modules>
+		<module>guerlab-sms-qiniu</module>
+		<module>guerlab-sms-qiniu-starter</module>
+
+		<module>guerlab-sms-upyun</module>
+		<module>guerlab-sms-upyun-starter</module>
+
+		<module>guerlab-sms-yunpian</module>
+		<module>guerlab-sms-yunpian-starter</module>
+		<module>guerlab-sms-server-webmvc-starter</module>
+	</modules>
 </project>

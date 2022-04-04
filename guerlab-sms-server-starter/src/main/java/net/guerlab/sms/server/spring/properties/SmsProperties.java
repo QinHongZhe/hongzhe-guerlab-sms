@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,18 +10,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.server.spring.properties;
 
-import net.guerlab.sms.server.properties.SmsConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import net.guerlab.sms.server.properties.SmsConfig;
+
 /**
- * 短信配置
+ * 短信配置.
  *
  * @author guer
  */
 @ConfigurationProperties(prefix = SmsProperties.PREFIX)
 public class SmsProperties extends SmsConfig {
 
-    public static final String PREFIX = "sms";
+	/**
+	 * 配置前缀.
+	 */
+	public static final String PREFIX = "sms";
 }

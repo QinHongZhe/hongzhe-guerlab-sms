@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,29 +10,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.guerlab.sms.server.service;
 
-import org.springframework.lang.Nullable;
+package net.guerlab.sms.server.service;
 
 import java.util.Map;
 
+import org.springframework.lang.Nullable;
+
 /**
- * 验证码类型生成
+ * 验证码类型生成.
  *
  * @author guer
  */
 @FunctionalInterface
 public interface VerificationCodeTypeGenerate {
 
-    /**
-     * 根据电话号码和参数列表生成验证码类型
-     *
-     * @param phone
-     *         电话号码
-     * @param params
-     *         参数列表
-     * @return 验证码类型
-     */
-    @Nullable
-    String getType(String phone, Map<String, String> params);
+	/**
+	 * 根据电话号码和参数列表生成验证码类型.
+	 *
+	 * @param phone  电话号码
+	 * @param params 参数列表
+	 * @return 验证码类型
+	 */
+	@Nullable
+	String getType(String phone, Map<String, String> params);
 }

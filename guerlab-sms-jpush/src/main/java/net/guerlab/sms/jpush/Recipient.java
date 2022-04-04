@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,41 +10,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.jpush;
+
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.Map;
-
 /**
- * 接收者
+ * 接收者.
  *
  * @author guer
  */
 @Data
 public class Recipient {
 
-    /**
-     * 手机号码
-     */
-    private String mobile;
+	/**
+	 * 手机号码.
+	 */
+	private String mobile;
 
-    /**
-     * 签名ID
-     */
-    @JsonProperty("sign_id")
-    private Integer signId;
+	/**
+	 * 签名ID.
+	 */
+	@JsonProperty("sign_id")
+	private Integer signId;
 
-    /**
-     * 模板ID
-     */
-    @JsonProperty("temp_id")
-    private Integer tempId;
+	/**
+	 * 模板ID.
+	 */
+	@JsonProperty("temp_id")
+	private Integer tempId;
 
-    /**
-     * 模板参数
-     */
-    @JsonProperty("temp_para")
-    private Map<String, String> tempPara;
+	/**
+	 * 模板参数.
+	 */
+	@JsonProperty("temp_para")
+	private Map<String, String> tempPara;
 }

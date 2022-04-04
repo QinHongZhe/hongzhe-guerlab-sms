@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,25 +10,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.jpush;
 
 import lombok.Data;
 
 /**
- * 发送返回结果
+ * 发送返回结果.
  *
  * @author guer
  */
 @Data
 public class Result {
 
-    private ErrorInfo error;
+	private ErrorInfo error;
 
-    @Data
-    public static final class ErrorInfo {
+	@Data
+	public static final class ErrorInfo {
 
-        private String code;
+		private String code;
 
-        private String message;
-    }
+		private String message;
+	}
 }

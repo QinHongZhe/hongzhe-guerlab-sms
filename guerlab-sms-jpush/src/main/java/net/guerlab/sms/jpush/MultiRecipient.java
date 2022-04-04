@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,40 +10,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.jpush;
+
+import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.Collection;
-
 /**
- * 接收者列表
+ * 接收者列表.
  *
  * @author guer
  */
 @Data
 public class MultiRecipient {
 
-    /**
-     * 签名ID
-     */
-    @JsonProperty("sign_id")
-    private Integer signId;
+	/**
+	 * 签名ID.
+	 */
+	@JsonProperty("sign_id")
+	private Integer signId;
 
-    /**
-     * 模板ID
-     */
-    @JsonProperty("temp_id")
-    private Integer tempId;
+	/**
+	 * 模板ID.
+	 */
+	@JsonProperty("temp_id")
+	private Integer tempId;
 
-    /**
-     * 标签
-     */
-    private String tag;
+	/**
+	 * 标签.
+	 */
+	private String tag;
 
-    /**
-     * 接收者列表
-     */
-    private Collection<Recipient> recipients;
+	/**
+	 * 接收者列表.
+	 */
+	private Collection<Recipient> recipients;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,20 +10,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.server.service;
 
 /**
- * 验证码生成
+ * 验证码生成.
  *
  * @author guer
  */
 @FunctionalInterface
 public interface CodeGenerate {
 
-    /**
-     * 生成验证码
-     *
-     * @return 验证码
-     */
-    String generate();
+	/**
+	 * 生成验证码.
+	 *
+	 * @return 验证码
+	 */
+	String generate();
 }

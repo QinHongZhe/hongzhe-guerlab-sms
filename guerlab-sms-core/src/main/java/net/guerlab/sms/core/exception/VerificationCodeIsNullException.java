@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,35 +10,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.core.exception;
 
 import java.util.Locale;
 
 /**
- * 手机验证码信息无效
+ * 手机验证码信息无效.
  *
  * @author guer
  */
 public class VerificationCodeIsNullException extends SmsException {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private static final String DEFAULT_MSG;
+	private static final String DEFAULT_MSG;
 
-    static {
-        Locale locale = Locale.getDefault();
+	static {
+		Locale locale = Locale.getDefault();
 
-        if (Locale.CHINA.equals(locale)) {
-            DEFAULT_MSG = "手机验证码信息无效";
-        } else {
-            DEFAULT_MSG = "The mobile verification code information is invalid.";
-        }
-    }
+		if (Locale.CHINA.equals(locale)) {
+			DEFAULT_MSG = "手机验证码信息无效";
+		}
+		else {
+			DEFAULT_MSG = "The mobile verification code information is invalid.";
+		}
+	}
 
-    /**
-     * 手机验证码信息无效
-     */
-    public VerificationCodeIsNullException() {
-        super(DEFAULT_MSG);
-    }
+	/**
+	 * 手机验证码信息无效.
+	 */
+	public VerificationCodeIsNullException() {
+		super(DEFAULT_MSG);
+	}
 }

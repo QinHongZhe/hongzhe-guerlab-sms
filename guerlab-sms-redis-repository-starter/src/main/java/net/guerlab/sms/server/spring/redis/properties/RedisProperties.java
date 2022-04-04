@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,13 +10,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.server.spring.redis.properties;
 
 import lombok.Data;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * redis配置
+ * redis配置.
  *
  * @author guer
  */
@@ -24,10 +26,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = RedisProperties.PREFIX)
 public class RedisProperties {
 
-    public static final String PREFIX = "sms.verification-code.repository.redis";
+	/**
+	 * 配置前缀.
+	 */
+	public static final String PREFIX = "sms.verification-code.repository.redis";
 
-    /**
-     * Key前缀
-     */
-    private String keyPrefix;
+	/**
+	 * Key前缀.
+	 */
+	private String keyPrefix;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,35 +10,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.core.exception;
 
 import java.util.Locale;
 
 /**
- * 手机号无效
+ * 手机号无效.
  *
  * @author guer
  */
 public class PhoneIsNullException extends SmsException {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private static final String DEFAULT_MSG;
+	private static final String DEFAULT_MSG;
 
-    static {
-        Locale locale = Locale.getDefault();
+	static {
+		Locale locale = Locale.getDefault();
 
-        if (Locale.CHINA.equals(locale)) {
-            DEFAULT_MSG = "手机号无效";
-        } else {
-            DEFAULT_MSG = "Invalid phone number.";
-        }
-    }
+		if (Locale.CHINA.equals(locale)) {
+			DEFAULT_MSG = "手机号无效";
+		}
+		else {
+			DEFAULT_MSG = "Invalid phone number.";
+		}
+	}
 
-    /**
-     * 手机号无效
-     */
-    public PhoneIsNullException() {
-        super(DEFAULT_MSG);
-    }
+	/**
+	 * 手机号无效.
+	 */
+	public PhoneIsNullException() {
+		super(DEFAULT_MSG);
+	}
 }

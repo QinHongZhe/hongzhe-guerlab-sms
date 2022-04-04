@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,95 +10,94 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.guerlab.sms.server.service;
 
-import net.guerlab.sms.server.properties.RejectPolicy;
-import net.guerlab.sms.server.properties.SmsAsyncConfig;
-import org.springframework.lang.Nullable;
+package net.guerlab.sms.server.service;
 
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.springframework.lang.Nullable;
+
+import net.guerlab.sms.server.properties.RejectPolicy;
+import net.guerlab.sms.server.properties.SmsAsyncConfig;
+
 /**
- * 抽象发送异步处理线程池
+ * 抽象发送异步处理线程池.
  *
  * @author guer
  */
 public abstract class AbstractSendAsyncThreadPoolExecutor implements SendAsyncThreadPoolExecutor {
 
-    protected final SmsAsyncConfig config;
+	protected final SmsAsyncConfig config;
 
-    public AbstractSendAsyncThreadPoolExecutor(SmsAsyncConfig config) {
-        this.config = config;
-    }
+	public AbstractSendAsyncThreadPoolExecutor(SmsAsyncConfig config) {
+		this.config = config;
+	}
 
-    /**
-     * 根据拒绝策略构造拒绝处理程序
-     *
-     * @param type
-     *         拒绝策略
-     * @return 拒绝处理程序
-     */
-    protected static RejectedExecutionHandler buildRejectedExecutionHandler(@Nullable RejectPolicy type) {
-        if (type == null) {
-            return new ThreadPoolExecutor.AbortPolicy();
-        }
-        switch (type) {
-            case Caller:
-                return new ThreadPoolExecutor.CallerRunsPolicy();
-            case Discard:
-                return new ThreadPoolExecutor.DiscardPolicy();
-            case DiscardOldest:
-                return new ThreadPoolExecutor.DiscardOldestPolicy();
-            default:
-                return new ThreadPoolExecutor.AbortPolicy();
-        }
-    }
+	/**
+	 * 根据拒绝策略构造拒绝处理程序.
+	 *
+	 * @param type 拒绝策略
+	 * @return 拒绝处理程序
+	 */
+	protected static RejectedExecutionHandler buildRejectedExecutionHandler(@Nullable RejectPolicy type) {
+		if (type == null) {
+			return new ThreadPoolExecutor.AbortPolicy();
+		}
+		switch (type) {
+		case Caller:
+			return new ThreadPoolExecutor.CallerRunsPolicy();
+		case Discard:
+			return new ThreadPoolExecutor.DiscardPolicy();
+		case DiscardOldest:
+			return new ThreadPoolExecutor.DiscardOldestPolicy();
+		default:
+			return new ThreadPoolExecutor.AbortPolicy();
+		}
+	}
 
-    /**
-     * 提交异步任务
-     *
-     * @param command
-     *         待执行任务
-     */
-    @Override
-    public final void submit(Runnable command) {
-        submit0(command);
-    }
+	/**
+	 * 提交异步任务.
+	 *
+	 * @param command 待执行任务
+	 */
+	@Override
+	public final void submit(Runnable command) {
+		submit0(command);
+	}
 
-    /**
-     * 提交异步任务
-     *
-     * @param command
-     *         待执行任务
-     */
-    protected abstract void submit0(Runnable command);
+	/**
+	 * 提交异步任务.
+	 *
+	 * @param command 待执行任务
+	 */
+	protected abstract void submit0(Runnable command);
 
-    /**
-     * 默认线程工厂
-     */
-    protected static class DefaultThreadFactory implements ThreadFactory {
+	/**
+	 * 默认线程工厂.
+	 */
+	protected static class DefaultThreadFactory implements ThreadFactory {
 
-        private final ThreadGroup group;
+		private final ThreadGroup group;
 
-        private final AtomicInteger threadNumber = new AtomicInteger(1);
+		private final AtomicInteger threadNumber = new AtomicInteger(1);
 
-        private final String namePrefix;
+		private final String namePrefix;
 
-        DefaultThreadFactory() {
-            SecurityManager s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
-            namePrefix = "sms-send-async-thread-";
-        }
+		DefaultThreadFactory() {
+			SecurityManager s = System.getSecurityManager();
+			group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+			namePrefix = "sms-send-async-thread-";
+		}
 
-        @Override
-        public Thread newThread(Runnable runnable) {
-            Thread thread = new Thread(group, runnable, namePrefix + threadNumber.getAndIncrement(), 0);
-            thread.setDaemon(false);
-            thread.setPriority(Thread.NORM_PRIORITY);
-            return thread;
-        }
-    }
+		@Override
+		public Thread newThread(Runnable runnable) {
+			Thread thread = new Thread(group, runnable, namePrefix + threadNumber.getAndIncrement(), 0);
+			thread.setDaemon(false);
+			thread.setPriority(Thread.NORM_PRIORITY);
+			return thread;
+		}
+	}
 }

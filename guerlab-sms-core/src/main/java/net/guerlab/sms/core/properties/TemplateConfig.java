@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,15 +10,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.core.properties;
+
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Map;
+import org.springframework.lang.Nullable;
 
 /**
- * 基础短信配置类
+ * 基础短信配置类.
  *
  * @author guer
  */
@@ -26,19 +29,19 @@ import java.util.Map;
 @Getter
 public class TemplateConfig {
 
-    /**
-     * 短信模板
-     */
-    protected Map<String, String> templates;
+	/**
+	 * 短信模板.
+	 */
+	protected Map<String, String> templates;
 
-    /**
-     * 获取短信模板
-     *
-     * @param type
-     *            类型
-     * @return 短信模板
-     */
-    public String getTemplates(String type) {
-        return templates == null ? null : templates.get(type);
-    }
+	/**
+	 * 获取短信模板.
+	 *
+	 * @param type 类型
+	 * @return 短信模板
+	 */
+	@Nullable
+	public String getTemplates(String type) {
+		return templates == null ? null : templates.get(type);
+	}
 }

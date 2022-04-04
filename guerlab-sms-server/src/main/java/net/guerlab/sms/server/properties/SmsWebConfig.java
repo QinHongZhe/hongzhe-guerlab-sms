@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 the original author or authors.
+ * Copyright 2018-2022 guerlab.net and other contributors.
  *
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,51 +10,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.guerlab.sms.server.properties;
 
 import lombok.Data;
 
 /**
- * 短信Web配置
+ * 短信Web配置.
  *
  * @author guer
  */
 @Data
 public class SmsWebConfig {
 
-    /**
-     * 默认基础路径
-     */
-    public static final String DEFAULT_BASE_PATH = "/sms";
+	/**
+	 * 默认基础路径.
+	 */
+	public static final String DEFAULT_BASE_PATH = "/sms";
 
-    /**
-     * 是否启用web端点
-     */
-    private boolean enable = false;
+	/**
+	 * 是否启用web端点.
+	 */
+	private boolean enable = false;
 
-    /**
-     * 基础路径
-     */
-    private String basePath = DEFAULT_BASE_PATH;
+	/**
+	 * 基础路径.
+	 */
+	private String basePath = DEFAULT_BASE_PATH;
 
-    /**
-     * 是否启用验证码发送web端点
-     */
-    private boolean enableSend = true;
+	/**
+	 * 是否启用验证码发送web端点.
+	 */
+	private boolean enableSend = true;
 
-    /**
-     * 是否启用验证码查询web端点
-     */
-    private boolean enableGet = true;
+	/**
+	 * 是否启用验证码查询web端点.
+	 */
+	private boolean enableGet = true;
 
-    /**
-     * 是否启用验证码验证web端点
-     */
-    private boolean enableVerify = true;
+	/**
+	 * 是否启用验证码验证web端点.
+	 */
+	private boolean enableVerify = true;
 
-    /**
-     * 是否启用通知发送web端点
-     */
-    private boolean enableNotice = true;
+	/**
+	 * 是否启用通知发送web端点.
+	 */
+	private boolean enableNotice = true;
 
 }
