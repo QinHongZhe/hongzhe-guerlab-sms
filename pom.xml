@@ -286,6 +286,7 @@
 		<module>guerlab-sms-server</module>
 		<module>guerlab-sms-server-starter</module>
 		<module>guerlab-sms-redis-repository-starter</module>
+		<module>guerlab-sms-server-webmvc-starter</module>
 
 		<module>guerlab-sms-aliyun</module>
 		<module>guerlab-sms-aliyun-starter</module>
@@ -322,6 +323,5 @@
 
 		<module>guerlab-sms-yunpian</module>
 		<module>guerlab-sms-yunpian-starter</module>
-		<module>guerlab-sms-server-webmvc-starter</module>
 	</modules>
 </project>
