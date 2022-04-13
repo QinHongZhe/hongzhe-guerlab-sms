@@ -19,13 +19,15 @@
 
 ## 子项目列表
 
-| 子项目                               | 说明                   |
-| :------------------------------------- |----------------------|
-| guerlab-sms-core                     | 核心包                  |
-| guerlab-sms-server                   | 短信服务实现               |
-| guerlab-sms-server-starter           | 短信服务启动包              |
-| guerlab-sms-redis-repository-starter | 基于redis的repository实现 |
-| guerlab-sms-server-webmvc-starter | web端点实现              |
+| 子项目                                     | 说明                   |
+|:----------------------------------------|----------------------|
+| guerlab-sms-core                        | 核心包                  |
+| guerlab-sms-server                      | 短信服务实现               |
+| guerlab-sms-server-starter              | 短信服务启动包              |
+| guerlab-sms-redis-repository-starter    | 基于redis的repository实现 |
+| guerlab-sms-server-webmvc-starter       | web端点实现              |
+| guerlab-sms-template-support            | 模板支持                 |
+| guerlab-sms-template-freemarker-support | freemarker模板引擎支持     |
 
 ## 支持通道
 

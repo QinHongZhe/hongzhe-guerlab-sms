@@ -124,6 +124,17 @@
 				<version>${revision}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-template-support</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.guerlab.sms</groupId>
+				<artifactId>guerlab-sms-template-freemarker-support</artifactId>
+				<version>${revision}</version>
+			</dependency>
+
 			<!-- handler -->
 			<dependency>
 				<groupId>net.guerlab.sms</groupId>
@@ -287,6 +298,9 @@
 		<module>guerlab-sms-server-starter</module>
 		<module>guerlab-sms-redis-repository-starter</module>
 		<module>guerlab-sms-server-webmvc-starter</module>
+
+		<module>guerlab-sms-template-support</module>
+		<module>guerlab-sms-template-freemarker-support</module>
 
 		<module>guerlab-sms-aliyun</module>
 		<module>guerlab-sms-aliyun-starter</module>
