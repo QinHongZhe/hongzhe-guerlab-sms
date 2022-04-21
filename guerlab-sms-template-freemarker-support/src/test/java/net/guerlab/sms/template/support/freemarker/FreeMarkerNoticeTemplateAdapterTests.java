@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 
 import net.guerlab.sms.core.domain.NoticeData;
 import net.guerlab.sms.template.support.NoticeTemplate;
+import net.guerlab.sms.template.support.freemarker.loader.FileFreeMarkerTemplateLoader;
 
 /**
  * @author guer
@@ -75,6 +76,23 @@ class FreeMarkerNoticeTemplateAdapterTests {
 		noticeData.setParams(params);
 
 		String contentTemplate = "freemarker:验证码：${code}<#if time??>，有效期：${time}分钟</#if>【${smsSign}】";
+		String targetContent = "验证码：080601【测试短信签名】";
+		String resultContent = NoticeTemplate.format(contentTemplate, noticeData);
+		Assertions.assertEquals(targetContent, resultContent);
+	}
+
+	@Test
+	void format4() {
+		NoticeData noticeData = new NoticeData();
+		Map<String, String> params = new HashMap<>();
+		params.put("code", "080601");
+		params.put("smsSign", "测试短信签名");
+
+		noticeData.setParams(params);
+
+		FreeMarkerNoticeTemplateAdapter.addTemplateLoader(new FileFreeMarkerTemplateLoader());
+
+		String contentTemplate = "freemarker:file:./src/test/resources/template.fd";
 		String targetContent = "验证码：080601【测试短信签名】";
 		String resultContent = NoticeTemplate.format(contentTemplate, noticeData);
 		Assertions.assertEquals(targetContent, resultContent);

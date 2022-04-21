@@ -14,18 +14,16 @@
 package net.guerlab.sms.template.support.freemarker;
 
 import java.io.CharArrayWriter;
-import java.io.Reader;
-import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Map;
 
-import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
 import net.guerlab.sms.core.exception.SmsException;
 import net.guerlab.sms.template.support.NoticeTemplateAdapter;
+import net.guerlab.sms.template.support.freemarker.loader.FreeMarkerTemplateLoader;
 
 /**
  * FreeMarker通知模板适配器.
@@ -39,14 +37,28 @@ public class FreeMarkerNoticeTemplateAdapter implements NoticeTemplateAdapter {
 	 */
 	public static final String ADAPTER_KEY = "FREEMARKER";
 
+	private static final InternalTemplateLoader loader;
+
 	private final Configuration configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
 
-	public FreeMarkerNoticeTemplateAdapter() {
+	static {
 		Locale locale = Locale.getDefault();
+		loader = new InternalTemplateLoader(locale);
+	}
 
+	public FreeMarkerNoticeTemplateAdapter() {
 		configuration.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
-		configuration.setTemplateLoader(new InternalTemplateLoader(locale));
-		configuration.setLocale(locale);
+		configuration.setTemplateLoader(loader);
+		configuration.setLocale(loader.getLocale());
+	}
+
+	/**
+	 * 添加模板加载器.
+	 *
+	 * @param loader 模板加载器
+	 */
+	public static void addTemplateLoader(FreeMarkerTemplateLoader<?> loader) {
+		FreeMarkerNoticeTemplateAdapter.loader.addLoader(loader);
 	}
 
 	@Override
@@ -65,41 +77,11 @@ public class FreeMarkerNoticeTemplateAdapter implements NoticeTemplateAdapter {
 			Template template = configuration.getTemplate(contentTemplate);
 			CharArrayWriter writer = new CharArrayWriter();
 			template.process(params, writer);
-			return writer.toString();
+			return writer.toString().trim();
 		}
 		catch (Exception e) {
 			throw new SmsException(e);
 		}
 	}
 
-	private static final class InternalTemplateLoader implements TemplateLoader {
-
-		private final Locale locale;
-
-		InternalTemplateLoader(Locale locale) {
-			this.locale = locale;
-		}
-
-		@Override
-		public Object findTemplateSource(String name) {
-			String suffix = locale.toString();
-			int length = suffix.length() + 1;
-			return name.substring(0, name.length() - length);
-		}
-
-		@Override
-		public long getLastModified(Object templateSource) {
-			return System.currentTimeMillis();
-		}
-
-		@Override
-		public Reader getReader(Object templateSource, String encoding) {
-			return new StringReader((String) templateSource);
-		}
-
-		@Override
-		public void closeTemplateSource(Object templateSource) {
-
-		}
-	}
 }
