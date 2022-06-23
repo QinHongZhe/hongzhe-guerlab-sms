@@ -42,7 +42,7 @@ import net.guerlab.sms.server.handler.AbstractSendHandler;
 @Slf4j
 public class QCloudV3SendHandler extends AbstractSendHandler<QCloudV3Properties> {
 
-	private static final String SUCCESS_CODE = "OK";
+	private static final String SUCCESS_CODE = "Ok";
 
 	private final SmsClient sender;
 
