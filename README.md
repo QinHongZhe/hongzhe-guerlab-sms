@@ -19,23 +19,30 @@
 
 ## 子项目列表
 
-|子项目|说明| |:--|--| |guerlab-sms-core|核心包| |guerlab-sms-server-starter|短信服务实现|
-|guerlab-sms-redis-repository-starter|基于redis的repository实现|
+| 子项目                                     | 说明                   |
+|:----------------------------------------|----------------------|
+| guerlab-sms-core                        | 核心包                  |
+| guerlab-sms-server                      | 短信服务实现               |
+| guerlab-sms-server-starter              | 短信服务启动包              |
+| guerlab-sms-redis-repository-starter    | 基于redis的repository实现 |
+| guerlab-sms-server-webmvc-starter       | web端点实现              |
+| guerlab-sms-template-support            | 模板支持                 |
+| guerlab-sms-template-freemarker-support | freemarker模板引擎支持     |
 
 ## 支持通道
 
-- [x] 阿里云 guerlab-sms-aliyun-starter
-- [X] 百度云 guerlab-sms-baiducloud-starter
-- [X] 移动云 guerlab-sms-chinamobile-starter
-- [x] 华为云 guerlab-sms-huaweicloud-starter
-- [x] 京东云 guerlab-sms-jdcloud-starter
-- [x] 极光短信 guerlab-sms-jpush-starter
-- [X] 网易云信 guerlab-sms-netease-starter
-- [x] 腾讯云 guerlab-sms-qcloud-starter
-- [x] 腾讯云V3 guerlab-sms-qcloud-v3-starter
-- [x] 七牛云 guerlab-sms-qiniu-starter
-- [X] 又拍云 guerlab-sms-upyun-starter
-- [X] 云片网 guerlab-sms-yunpian-starter
+- [X]  阿里云 guerlab-sms-aliyun-starter
+- [X]  百度云 guerlab-sms-baiducloud-starter
+- [X]  移动云 guerlab-sms-chinamobile-starter
+- [X]  华为云 guerlab-sms-huaweicloud-starter
+- [X]  京东云 guerlab-sms-jdcloud-starter
+- [X]  极光短信 guerlab-sms-jpush-starter
+- [X]  网易云信 guerlab-sms-netease-starter
+- [X]  腾讯云 guerlab-sms-qcloud-starter
+- [X]  腾讯云V3 guerlab-sms-qcloud-v3-starter
+- [X]  七牛云 guerlab-sms-qiniu-starter
+- [X]  又拍云 guerlab-sms-upyun-starter
+- [X]  云片网 guerlab-sms-yunpian-starter
 
 ## wiki
 

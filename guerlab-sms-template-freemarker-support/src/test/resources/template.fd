@@ -1,0 +1,1 @@
+验证码：${code}<#if time??>，有效期：${time}分钟</#if>【${smsSign}】
